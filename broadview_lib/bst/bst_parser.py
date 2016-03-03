@@ -174,11 +174,15 @@ class BSTParser():
     def dispatchParser(self, report):
         ret = True
         if report["realm"] in self.__handlers:
-            ret = self.__handlers[report["realm"]](report["data"])
+            try:
+                self.__handlers[report["realm"]](report["data"])
+            except:
+                ret = False
+        else:
+            ret = False
         return ret
 
     def process(self, data):
-
         ret = True
         if self.valid(data):
             if data["method"] == "get-bst-report":
@@ -193,11 +197,17 @@ class BSTParser():
             if ret:
                 self.__asicId = data["asic-id"]
                 x = data["time-stamp"].strip()
-                self.__timestamp = time.strptime(x, "%Y-%m-%d - %H:%M:%S")
-                for x in data["report"]:
-                    ret = self.dispatchParser(x)  
-                    if ret == False:
-                        break
+                try:
+                    self.__timestamp = time.strptime(x, "%Y-%m-%d - %H:%M:%S")
+                except:
+                    ret = False
+                if ret:
+                    for x in data["report"]:
+                        ret = self.dispatchParser(x)  
+                        if ret == False:
+                            break
+        else:
+            ret = False
         return ret
 
     def valid(self, data):
@@ -216,6 +226,13 @@ class BSTParser():
                data["method"] != "trigger-report" and \
                data["method"] != "get-bst-thresholds":
                 ret = False
+
+        if ret:
+            if not type(data["report"]) == list:
+                ret = False
+            elif len(data["report"]) == 0:
+                ret = False
+
         return ret
 
 class TestParser(unittest.TestCase):
@@ -409,9 +426,206 @@ class TestParser(unittest.TestCase):
                 }]
         }
 
+
+        self.bst_report_unknown_method = {
+            "jsonrpc": "2.0",
+            "method": "get-foo-report",
+            "asic-id": "20",
+            "version": "1",
+            "time-stamp": "2016-02-15 - 00:15:04 ",
+            "report": [
+                {
+                    "realm": "device",
+                    "data": 46
+                }, {
+                    "realm": "ingress-port-priority-group",
+                    "data": [{
+                            "port": "2",
+                            "data": [[5, 45500, 44450]]
+                        }, {
+                            "port": "3",
+                            "data": [[6, 25500, 24450]]
+                        }]
+                }, {
+                    "realm": "ingress-port-service-pool",
+                    "data": [{
+                            "port": "2",
+                            "data": [[5, 324]]
+                        }, {
+                            "port": "3",
+                            "data": [[6, 366]]
+                        }]
+                }, {
+                    "realm": "ingress-service-pool",
+                    "data": [[1, 3240], [2, 3660]]
+                }, {
+                    "realm": "egress-cpu-queue",
+                    "data": [[3, 4566, 0]]
+                }, {
+                    "realm": "egress-mc-queue",
+                    "data": [[1, "1", 34, 89], [2, "4", 1244, 0], [3, "5", 0, 3]]
+
+                }, {
+                    "realm": "egress-port-service-pool",
+                    "data": [{
+                            "port": "2",
+                            "data": [[5, 0, 324, 0]]
+                        }, {
+                            "port": "3",
+                            "data": [[6, 0, 366, 0]]
+                        }]
+                }, {
+                    "realm": "egress-rqe-queue",
+                    "data": [[2, 3333, 4444], [5, 25, 45]]
+                }, {
+                    "realm": "egress-service-pool",
+                    "data": [[2, 0, 0, 3240], [3, 3660, 0, 0]]
+                }, {
+                    "realm": "egress-uc-queue",
+                    "data": [[6, "0", 1111]]
+                }, {
+                    "realm": "egress-uc-queue-group",
+                    "data": [[6, 2222]]
+                }]
+        }
+
+        self.bst_report_unknown_realm = {
+            "jsonrpc": "2.0",
+            "method": "get-bst-report",
+            "asic-id": "20",
+            "version": "1",
+            "time-stamp": "2016-02-15 - 00:15:04 ",
+            "report": [
+                {
+                    "realm": "mustard",
+                    "data": 46
+                }]
+        }
+
+        self.bst_report_bad_timestamp = {
+            "jsonrpc": "2.0",
+            "method": "get-bst-report",
+            "asic-id": "20",
+            "version": "1",
+            "time-stamp": "xxxxxx ",
+            "report": [
+                {
+                    "realm": "device",
+                    "data": 46
+                }, {
+                    "realm": "ingress-port-priority-group",
+                    "data": [{
+                            "port": "2",
+                            "data": [[5, 45500, 44450]]
+                        }, {
+                            "port": "3",
+                            "data": [[6, 25500, 24450]]
+                        }]
+                }, {
+                    "realm": "ingress-port-service-pool",
+                    "data": [{
+                            "port": "2",
+                            "data": [[5, 324]]
+                        }, {
+                            "port": "3",
+                            "data": [[6, 366]]
+                        }]
+                }, {
+                    "realm": "ingress-service-pool",
+                    "data": [[1, 3240], [2, 3660]]
+                }, {
+                    "realm": "egress-cpu-queue",
+                    "data": [[3, 4566, 0]]
+                }, {
+                    "realm": "egress-mc-queue",
+                    "data": [[1, "1", 34, 89], [2, "4", 1244, 0], [3, "5", 0, 3]]
+
+                }, {
+                    "realm": "egress-port-service-pool",
+                    "data": [{
+                            "port": "2",
+                            "data": [[5, 0, 324, 0]]
+                        }, {
+                            "port": "3",
+                            "data": [[6, 0, 366, 0]]
+                        }]
+                }, {
+                    "realm": "egress-rqe-queue",
+                    "data": [[2, 3333, 4444], [5, 25, 45]]
+                }, {
+                    "realm": "egress-service-pool",
+                    "data": [[2, 0, 0, 3240], [3, 3660, 0, 0]]
+                }, {
+                    "realm": "egress-uc-queue",
+                    "data": [[6, "0", 1111]]
+                }, {
+                    "realm": "egress-uc-queue-group",
+                    "data": [[6, 2222]]
+                }]
+        }
+
+        self.bst_report_report_dict = {
+            "jsonrpc": "2.0",
+            "method": "get-bst-report",
+            "asic-id": "20",
+            "version": "1",
+            "time-stamp": "2016-02-15 - 00:15:04 ",
+            "report": {}
+        }
+
+        self.bst_report_empty_report = {
+            "jsonrpc": "2.0",
+            "method": "get-bst-report",
+            "asic-id": "20",
+            "version": "1",
+            "time-stamp": "2016-02-15 - 00:15:04 ",
+            "report": []
+        }
+
+
+        self.bst_report_missing_report = {
+            "jsonrpc": "2.0",
+            "method": "get-bst-report",
+            "asic-id": "20",
+            "version": "1",
+            "time-stamp": "2016-02-15 - 00:15:04 "
+        }
+
+
+    def test_unknown_method_bst(self):
+        rep = BSTParser()
+        ret = rep.process(self.bst_report_unknown_method)
+        self.assertEqual(ret, False)
+
+    def test_unknown_realm(self):
+        rep = BSTParser()
+        ret = rep.process(self.bst_report_unknown_realm)
+        self.assertEqual(ret, False)
+
+    def test_bad_timestamp(self):
+        rep = BSTParser()
+        ret = rep.process(self.bst_report_bad_timestamp)
+        self.assertEqual(ret, False)
+
+    def test_report_dict(self):
+        rep = BSTParser()
+        ret = rep.process(self.bst_report_report_dict)
+        self.assertEqual(ret, False)
+
+    def test_empty_report(self):
+        rep = BSTParser()
+        ret = rep.process(self.bst_report_empty_report)
+        self.assertEqual(ret, False)
+
+    def test_missing_report(self):
+        rep = BSTParser()
+        ret = rep.process(self.bst_report_missing_report)
+        self.assertEqual(ret, False)
+
     def test_bst_report(self):
         rep = BSTParser()
-        rep.process(self.bst_report)
+        ret = rep.process(self.bst_report)
+        self.assertEqual(ret, True)
         val = rep.getReportType()
         self.assertEqual(val, ReportTypes.Report)
 
@@ -699,7 +913,8 @@ class TestParser(unittest.TestCase):
 
     def test_trigger(self):
         rep = BSTParser()
-        rep.process(self.trigger)
+        ret = rep.process(self.trigger)
+        self.assertEqual(ret, True)
         val = rep.getReportType()
         self.assertEqual(val, ReportTypes.Trigger)
 
@@ -984,7 +1199,8 @@ class TestParser(unittest.TestCase):
 
     def test_thresholds(self):
         rep = BSTParser()
-        rep.process(self.thresholds)
+        ret = rep.process(self.thresholds)
+        self.assertEqual(ret, True)
         val = rep.getReportType()
         self.assertEqual(val, ReportTypes.Threshold)
 
