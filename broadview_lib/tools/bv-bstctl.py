@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 # (C) Copyright Broadcom Corporation 2016
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,6 +18,7 @@ from broadview_lib.config.bst import *
 from broadview_lib.config.broadviewconfig import BroadViewBSTSwitches
 import sys
 import unittest
+import json
 
 class BSTConfigCommand():
     def __init__(self):
@@ -421,7 +424,7 @@ class BSTConfigCommand():
             x.setASIC(asic)
             status = x.send()
             if status == 200:
-                ret = x.getJSON()
+                ret = json.dumps(x.getJSON())
                 print ret
             else:
                 print "failure: %d" % (status)
@@ -470,7 +473,7 @@ class BSTConfigCommand():
 
             status, rep = x.send()
             if status == 200:
-                ret = x.getJSON()
+                ret = json.dumps(x.getJSON())
                 print ret
             else:
                 print "failure: %d" % (status)
@@ -516,7 +519,7 @@ class BSTConfigCommand():
 
             status, rep = x.send()
             if status == 200:
-                ret = x.getJSON()
+                ret = json.dumps(x.getJSON())
                 print ret
             else:
                 print "failure: %d" % (status)
