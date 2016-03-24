@@ -65,8 +65,8 @@ class ConfigureBSTFeature(AgentAPI):
     def setASIC(self, val):
         self.__asic_id = val
 
-    def send(self):
-        status, json = self._send(self.toDict())
+    def send(self, timeout=30):
+        status, json = self._send(self.toDict(), timeout)
         return status
 
 
@@ -147,8 +147,8 @@ class ConfigureBSTTracking(AgentAPI):
     def setASIC(self, val):
         self.__asic_id = val
 
-    def send(self):
-        status, json = self._send(self.toDict())
+    def send(self, timeout=30):
+        status, json = self._send(self.toDict(), timeout)
         return status
 
     def toDict(self):
@@ -186,8 +186,8 @@ class ConfigureBSTThresholds(AgentAPI):
     def setParams(self, params):
         self.__params = params
 
-    def send(self):
-        status, json = self._send(self.toDict())
+    def send(self, timeout=30):
+        status, json = self._send(self.toDict(), timeout)
         return status 
 
     def toDict(self):
@@ -402,8 +402,8 @@ class ClearBSTStatistics(AgentAPI):
     def setASIC(self, val):
         self.__asic_id = val
 
-    def send(self):
-        status, json = self._send(self.toDict())
+    def send(self, timeout=30):
+        status, json = self._send(self.toDict(), timeout)
         return status
 
     def toDict(self):
@@ -426,8 +426,8 @@ class ClearBSTThresholds(AgentAPI):
     def setASIC(self, val):
         self.__asic_id = val
 
-    def send(self):
-        status, json = self._send(self.toDict())
+    def send(self, timeout=30):
+        status, json = self._send(self.toDict(), timeout)
         return status
 
     def toDict(self):
@@ -499,8 +499,8 @@ class GetBSTFeature(AgentAPI):
     def getJSON(self):
         return self.__json
 
-    def send(self):
-        status, json = self._send(self.toDict())
+    def send(self, timeout=30):
+        status, json = self._send(self.toDict(), timeout)
         if status == 200:
             self.__version = json["version"]
             res = json["result"]
@@ -590,8 +590,8 @@ class GetBSTTracking(AgentAPI):
     def getJSON(self):
         return self.__json
 
-    def send(self):
-        status, json = self._send(self.toDict())
+    def send(self, timeout=30):
+        status, json = self._send(self.toDict(), timeout)
         if status == 200:
             self.__version = json["version"]
             res = json["result"]
@@ -677,9 +677,9 @@ class GetBSTThresholds(AgentAPI):
     def getJSON(self):
         return self.__json
 
-    def send(self):
+    def send(self, timeout=30):
         rep = None
-        status, json = self._send(self.toDict())
+        status, json = self._send(self.toDict(), timeout)
         if status == 200:
             rep = BSTParser()
             self.__json = json["report"]
@@ -766,8 +766,8 @@ class GetBSTReport(AgentAPI):
     def getJSON(self):
         return self.__json
 
-    def send(self):
-        status, json = self._send(self.toDict())
+    def send(self, timeout=30):
+        status, json = self._send(self.toDict(), timeout)
         rep = None
         if status == 200:
             self.__json = json["report"]

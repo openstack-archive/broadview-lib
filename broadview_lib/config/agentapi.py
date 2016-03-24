@@ -49,7 +49,7 @@ class AgentAPI(object):
     def getFeature(self):
         return self.__feature
 
-    def _send(self, o):
+    def _send(self, o, timeout):
         self.__payload = {}
         self.__payload["jsonrpc"] = "2.0"
         self.__payload["asic-id"] = o["asic-id"]
@@ -57,7 +57,7 @@ class AgentAPI(object):
         self.__payload["params"] = o["params"]
         self.__payload["id"] = AgentAPI.__serial
         AgentAPI.__serial = AgentAPI.__serial + 1
-        conn = AgentConnection(self.__host, self.__port, self.__feature)
+        conn = AgentConnection(self.__host, self.__port, self.__feature, timeout)
         return conn.makeRequest(self)
 
     def getjson(self):

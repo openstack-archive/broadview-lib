@@ -22,6 +22,9 @@ import urllib
 from xml.etree import ElementTree
 import json
 
+class RequestObj():
+  pass
+
 class RequestFailed(Exception):
   '''
   class to represent a failed RESTful call
@@ -36,35 +39,42 @@ class RequestFailed(Exception):
     return repr((self._url, self._http_code, self._open_code, self._open_msg))
 
 class AgentConnection():
-  def __init__(self, host, port, feature):
+  def __init__(self, host, port, feature, timeout):
     self.host = host
     self.port = port
     self.feature = feature  # e.g., "bst"
+    self._timeout = timeout
 
   def _is_ok(self, r):
     return r.status_code == 200
 
-  def _raise_fail_if(self, url, r):
+  def _raise_fail_if(self, url, r, timeout):
     if not self._is_ok(r):
-      try:
-        j = r.json()["status"]
-      except:
+      if timeout:
+        j = {"response_code": r.status_code,
+             "error_code": 0,
+             "msg": "Connection timeout"}
+      else:
         try:
-          t = ElementTree.fromstring(r)
-          j = {"response_code": r.status_code,
-               "error_code": 0,
-               "msg": "XML failure response from web server"}
-
+          j = r.json()["status"]
         except:
-          j = {"response_code": r.status_code,
-               "error_code": 0,
-               "msg": "Unparsable response from web server"}
+          try:
+            t = ElementTree.fromstring(r)
+            j = {"response_code": r.status_code,
+                 "error_code": 0,
+                 "msg": "XML failure response from web server"}
+
+          except:
+            j = {"response_code": r.status_code,
+                 "error_code": 0,
+                 "msg": "Unparsable response from web server"}
 
       raise RequestFailed(url, j["response_code"], j["error_code"], j["msg"])
 
   def makeRequest(self, request):
 
     headers = {"Content-Type": "application/json"}
+    timeout = False
 
     isGet = False
     if request.getHttpMethod() == "GET":
@@ -76,7 +86,10 @@ class AgentConnection():
         url = "http://%s:%d/broadview/%s/%s%s%s" % (self.host, self.port, self.feature, request.getHttpMethod(), "?req=", payload)
       else:
         url = "http://%s:%d/broadview/%s%s%s" % (self.host, self.port, request.getHttpMethod(), "?req=", payload)
-      r = requests.get(url, headers=headers)
+      try:
+        r = requests.get(url, timeout=self._timeout, headers=headers)
+      except requests.exceptions.Timeout:
+        timeout = True
     else:
       payload = request.getjson().encode("utf-8")
       if self.feature:
@@ -84,11 +97,21 @@ class AgentConnection():
       else:
         url = "http://%s:%d/broadview/%s" % (self.host, self.port, request.getHttpMethod())
       if isGet:
-        r = requests.get(url, data=payload, headers=headers)
+        try:
+          r = requests.get(url, timeout=self._timeout, data=payload, headers=headers)
+        except requests.exceptions.Timeout:
+          timeout = True
       else:
-        r = requests.post(url, data=payload, headers=headers)
+        try:
+          r = requests.post(url, timeout=self._timeout, data=payload, headers=headers)
+        except requests.exceptions.Timeout:
+          timeout = True
 
     json_data = {}
+    if timeout:
+        r = RequestObj() 
+        r.status_code = 500
+
     if r.status_code == 200:
         try:
             # Data can come back with leading.trailing spaces, which trips 
@@ -99,6 +122,6 @@ class AgentConnection():
         except:
             pass
 
-    self._raise_fail_if(url, r)
+    self._raise_fail_if(url, r, timeout)
     return (r.status_code, json_data)
 

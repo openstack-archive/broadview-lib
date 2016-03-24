@@ -22,6 +22,7 @@ import json
 
 class BSTConfigCommand():
     def __init__(self):
+        self._timeout = 30
         self.__cmds = { 
                         "cfg-feature" : self.handleCfgFeature,
                         "cfg-tracking" : self.handleCfgTracking,
@@ -46,6 +47,19 @@ class BSTConfigCommand():
                         "get-thresholds" : self.helpGetThresholds,
                         "get-report" : self.helpGetReport,
                       }
+
+    def getTimeout(self, args):
+        timeout = 30
+        usage = False
+        for x in args:
+            if "timeout:" in x:
+                v = x.split(":")
+                if len(v) == 2:
+                    timeout = int(v[1])
+                else:
+                    print "invalid timeout"
+                    usage = True
+        return usage, timeout
 
     def getASICHostPort(self, args):
         usage = False
@@ -84,7 +98,7 @@ class BSTConfigCommand():
         return  usage, asic, host, port 
 
     def usage(self):
-        print "usage: %s cmd host:ipv4 [port:port] [asic-id:id] [args]" % (sys.argv[0])
+        print "usage: %s cmd host:ipv4 [timeout:seconds] [port:port] [asic-id:id] [args]" % (sys.argv[0])
         print
         print "Commands:"
         print
@@ -106,6 +120,7 @@ class BSTConfigCommand():
     def handleCfgFeature(self, args):
         usage = False
         usage, asic, host, port = self.getASICHostPort(args)
+        usage, self._timeout = self.getTimeout(args)
         if not usage:
             x = ConfigureBSTFeature(host, port)
             x.setASIC(asic) 
@@ -138,7 +153,7 @@ class BSTConfigCommand():
             x.setStatUnitsInCells("stat_units_in_cells" in args)
             x.setSendSnapshotOnTrigger("send_snapshot_on_trigger" in args)
             x.setAsyncFullReports("async_full_reports" in args)
-            status = x.send()
+            status = x.send(timeout=self._timeout)
             if status != 200:
                 print "failure: %d" % (status)
 
@@ -178,7 +193,7 @@ class BSTConfigCommand():
             x.setTrackEgressCPUQueue("track_egress_cpu_queue" in args)
             x.setTrackEgressRQEQueue("track_egress_rqe_queue" in args)
             x.setTrackDevice("track_device" in args)
-            status = x.send()
+            status = x.send(self._timeout)
             if status != 200:
                 print "failure: %d" % (status)
 
@@ -213,7 +228,7 @@ class BSTConfigCommand():
                     if len(v) == 2:
                         x = ConfigureDeviceThreshold(host, port, int(v[1]))
                         x.setASIC(asic)
-                        status = x.send()
+                        status = x.send(self._timeout)
                         if status != 200:
                             print "failure: %d" % (status)
                     else:
@@ -226,7 +241,7 @@ class BSTConfigCommand():
                                                      int(v[1]),
                                                      int(v[2]))
                         x.setASIC(asic)
-                        status = x.send()
+                        status = x.send(self._timeout)
                         if status != 200:
                             print "failure: %d" % (status)
                     else:
@@ -239,7 +254,7 @@ class BSTConfigCommand():
                                                      int(v[1]),
                                                      int(v[2]))
                         x.setASIC(asic)
-                        status = x.send()
+                        status = x.send(self._timeout)
                         if status != 200:
                             print "failure: %d" % (status)
                     else:
@@ -256,7 +271,7 @@ class BSTConfigCommand():
                                                      int(v[5]),
                                                      int(v[6]))
                         x.setASIC(asic)
-                        status = x.send()
+                        status = x.send(self._timeout)
                         if status != 200:
                             print "failure: %d" % (status)
                     else:
@@ -271,7 +286,7 @@ class BSTConfigCommand():
                                                      int(v[3]),
                                                      int(v[4]))
                         x.setASIC(asic)
-                        status = x.send()
+                        status = x.send(self._timeout)
                         if status != 200:
                             print "failure: %d" % (status)
                     else:
@@ -284,7 +299,7 @@ class BSTConfigCommand():
                                                      int(v[1]),
                                                      int(v[2]))
                         x.setASIC(asic)
-                        status = x.send()
+                        status = x.send(self._timeout)
                         if status != 200:
                             print "failure: %d" % (status)
                     else:
@@ -297,7 +312,7 @@ class BSTConfigCommand():
                                                      int(v[1]),
                                                      int(v[2]))
                         x.setASIC(asic)
-                        status = x.send()
+                        status = x.send(self._timeout)
                         if status != 200:
                             print "failure: %d" % (status)
                     else:
@@ -311,7 +326,7 @@ class BSTConfigCommand():
                                                      int(v[2]),
                                                      int(v[3]))
                         x.setASIC(asic)
-                        status = x.send()
+                        status = x.send(self._timeout)
                         if status != 200:
                             print "failure: %d" % (status)
                     else:
@@ -326,7 +341,7 @@ class BSTConfigCommand():
                                                      int(v[3]),
                                                      int(v[4]))
                         x.setASIC(asic)
-                        status = x.send()
+                        status = x.send(self._timeout)
                         if status != 200:
                             print "failure: %d" % (status)
                     else:
@@ -340,7 +355,7 @@ class BSTConfigCommand():
                                                      int(v[2]),
                                                      int(v[3]))
                         x.setASIC(asic)
-                        status = x.send()
+                        status = x.send(self._timeout)
                         if status != 200:
                             print "failure: %d" % (status)
                     else:
@@ -353,7 +368,7 @@ class BSTConfigCommand():
                                                      int(v[1]),
                                                      int(v[2]))
                         x.setASIC(asic)
-                        status = x.send()
+                        status = x.send(self._timeout)
                         if status != 200:
                             print "failure: %d" % (status)
                     else:
@@ -389,7 +404,7 @@ class BSTConfigCommand():
         if not usage:
             x = ClearBSTStatistics(host, port)
             x.setASIC(asic)
-            status = x.send()
+            status = x.send(self._timeout)
             if status != 200:
                 print "failure: %d" % (status)
 
@@ -405,7 +420,7 @@ class BSTConfigCommand():
         if not usage:
             x = ClearBSTThresholds(host, port)
             x.setASIC(asic)
-            status = x.send()
+            status = x.send(self._timeout)
             if status != 200:
                 print "failure: %d" % (status)
 
@@ -422,7 +437,7 @@ class BSTConfigCommand():
         if not usage:
             x = GetBSTFeature(host, port)
             x.setASIC(asic)
-            status = x.send()
+            status = x.send(self._timeout)
             if status == 200:
                 ret = json.dumps(x.getJSON())
                 print ret
@@ -441,7 +456,7 @@ class BSTConfigCommand():
         if not usage:
             x = GetBSTTracking(host, port)
             x.setASIC(asic)
-            status = x.send()
+            status = x.send(self._timeout)
             if status == 200:
                 ret = x.getJSON()
                 print ret
@@ -471,7 +486,7 @@ class BSTConfigCommand():
             x.setIncludeEgressRQEQueue("include_egress_rqe_queue" in args)
             x.setIncludeDevice("include_device" in args)
 
-            status, rep = x.send()
+            status, rep = x.send(self._timeout)
             if status == 200:
                 ret = json.dumps(x.getJSON())
                 print ret
@@ -517,7 +532,7 @@ class BSTConfigCommand():
             x.setIncludeEgressRQEQueue("include_egress_rqe_queue" in args)
             x.setIncludeDevice("include_device" in args)
 
-            status, rep = x.send()
+            status, rep = x.send(self._timeout)
             if status == 200:
                 ret = json.dumps(x.getJSON())
                 print ret
