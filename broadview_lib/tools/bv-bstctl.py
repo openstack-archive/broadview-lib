@@ -458,7 +458,7 @@ class BSTConfigCommand():
             x.setASIC(asic)
             status = x.send(self._timeout)
             if status == 200:
-                ret = x.getJSON()
+                ret = json.dumps(x.getJSON())
                 print ret
             else:
                 print "failure: %d" % (status)
