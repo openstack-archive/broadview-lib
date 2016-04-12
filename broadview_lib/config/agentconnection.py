@@ -83,9 +83,9 @@ class AgentConnection():
     if False and isGet:
       payload = request.getjson().encode("utf-8")
       if self.feature:
-        url = "http://%s:%d/broadview/%s/%s%s%s" % (self.host, self.port, self.feature, request.getHttpMethod(), "?req=", payload)
+        url = "http://%s:%d/broadview/%s/%s%s%s" % (self.host, self.port, self.feature, request.getMethod(), "?req=", payload)
       else:
-        url = "http://%s:%d/broadview/%s%s%s" % (self.host, self.port, request.getHttpMethod(), "?req=", payload)
+        url = "http://%s:%d/broadview/%s%s%s" % (self.host, self.port, request.getMethod(), "?req=", payload)
       try:
         r = requests.get(url, timeout=self._timeout, headers=headers)
       except requests.exceptions.Timeout:
@@ -93,7 +93,7 @@ class AgentConnection():
     else:
       payload = request.getjson().encode("utf-8")
       if self.feature:
-        url = "http://%s:%d/broadview/%s/%s" % (self.host, self.port, self.feature, request.getHttpMethod())
+        url = "http://%s:%d/broadview/%s/%s" % (self.host, self.port, self.feature, request.getMethod())
       else:
         url = "http://%s:%d/broadview/%s" % (self.host, self.port, request.getHttpMethod())
       if isGet:
