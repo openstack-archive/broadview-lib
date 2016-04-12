@@ -49,6 +49,12 @@ class AgentAPI(object):
     def getFeature(self):
         return self.__feature
 
+    def getMethod(self):
+        ret = None
+        if self.__payload:
+            ret = self.__payload["method"]
+        return ret    
+
     def _send(self, o, timeout):
         self.__payload = {}
         self.__payload["jsonrpc"] = "2.0"
