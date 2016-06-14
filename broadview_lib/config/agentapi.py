@@ -21,6 +21,7 @@ class AgentAPI(object):
     def __init__(self):
         self.__httpMethod = "POST"
         self.__feature = None
+        self.__auth = None
         self.__host = None
         self.__port = None
         self.__payload = None
@@ -64,7 +65,9 @@ class AgentAPI(object):
         self.__payload["id"] = AgentAPI.__serial
         AgentAPI.__serial = AgentAPI.__serial + 1
         conn = AgentConnection(self.__host, self.__port, self.__feature, timeout)
-        return conn.makeRequest(self)
+        r = conn.makeRequest(self)
+        conn.close()
+        return r
 
     def getjson(self):
         x = json.dumps(OrderedDict(self.__payload))

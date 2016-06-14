@@ -35,6 +35,14 @@ class BroadViewBSTSwitches():
         else:
             return 0 
 
+    def getByIP(self, ip):
+        ret = None
+        for x in range(self.__len__()):
+            if BroadViewBSTSwitches.bst_switches[x]["ip"] == ip:
+                ret = BroadViewBSTSwitches.bst_switches[x] 
+                break
+        return ret
+
     def get(self, i):
         ret = None
         if i >= 0 and i < len(BroadViewBSTSwitches.bst_switches):

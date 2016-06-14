@@ -21,6 +21,15 @@ import sys
 import urllib
 from xml.etree import ElementTree
 import json
+from sidauth import SIDAuth
+from broadview_lib.config.broadviewconfig import BroadViewBSTSwitches
+
+try:
+    from oslo_log import log as logging
+except:
+    import logging
+
+LOG = logging.getLogger(__name__)
 
 class RequestObj():
   pass
@@ -39,11 +48,19 @@ class RequestFailed(Exception):
     return repr((self._url, self._http_code, self._open_code, self._open_msg))
 
 class AgentConnection():
+
   def __init__(self, host, port, feature, timeout):
     self.host = host
     self.port = port
     self.feature = feature  # e.g., "bst"
     self._timeout = timeout
+    self._swconfig = BroadViewBSTSwitches()
+    self._auth = None
+
+  def close(self):
+    if self._auth.logout:
+        self._auth.logout()
+    self._auth = None
 
   def _is_ok(self, r):
     return r.status_code == 200
@@ -71,7 +88,27 @@ class AgentConnection():
 
       raise RequestFailed(url, j["response_code"], j["error_code"], j["msg"])
 
-  def makeRequest(self, request):
+  def getAuth(self):
+    return self._auth
+
+  def getAuthConf(self):
+    auth = {}
+    auth["auth"] = None
+    auth["username"] = None
+    auth["password"] = None
+
+    conf = self._swconfig.getByIP(self.host)
+    if conf:
+        if "username" in conf:
+            auth["username"] = conf["username"]
+        if "password" in conf:
+            auth["password"] = conf["password"]
+        if "auth" in conf:
+            auth["auth"] = conf["auth"]
+
+    return auth
+
+  def __makeRequest(self, request):
 
     headers = {"Content-Type": "application/json"}
     timeout = False
@@ -80,32 +117,23 @@ class AgentConnection():
     if request.getHttpMethod() == "GET":
       isGet = True
 
-    if False and isGet:
-      payload = request.getjson().encode("utf-8")
-      if self.feature:
-        url = "http://%s:%d/broadview/%s/%s%s%s" % (self.host, self.port, self.feature, request.getMethod(), "?req=", payload)
-      else:
-        url = "http://%s:%d/broadview/%s%s%s" % (self.host, self.port, request.getMethod(), "?req=", payload)
+    auth = self.getAuth()
+
+    payload = request.getjson().encode("utf-8")
+    if self.feature:
+      url = "http://%s:%d/broadview/%s/%s" % (self.host, self.port, self.feature, request.getMethod())
+    else:
+      url = "http://%s:%d/broadview/%s" % (self.host, self.port, request.getMethod())
+    if isGet:
       try:
-        r = requests.get(url, timeout=self._timeout, headers=headers)
+        r = requests.get(url, timeout=self._timeout, data=payload, headers=headers, auth=auth)
       except requests.exceptions.Timeout:
         timeout = True
     else:
-      payload = request.getjson().encode("utf-8")
-      if self.feature:
-        url = "http://%s:%d/broadview/%s/%s" % (self.host, self.port, self.feature, request.getMethod())
-      else:
-        url = "http://%s:%d/broadview/%s" % (self.host, self.port, request.getMethod())
-      if isGet:
-        try:
-          r = requests.get(url, timeout=self._timeout, data=payload, headers=headers)
-        except requests.exceptions.Timeout:
-          timeout = True
-      else:
-        try:
-          r = requests.post(url, timeout=self._timeout, data=payload, headers=headers)
-        except requests.exceptions.Timeout:
-          timeout = True
+      try:
+        r = requests.post(url, timeout=self._timeout, data=payload, headers=headers, auth=auth)
+      except requests.exceptions.Timeout:
+        timeout = True
 
     json_data = {}
     if timeout:
@@ -122,6 +150,39 @@ class AgentConnection():
         except:
             pass
 
-    self._raise_fail_if(url, r, timeout)
+    return (r, json_data)
+       
+  def makeRequest(self, request):
+    r, json_data = self.__makeRequest(request)
+
+    if r.status_code == 401:
+        conf = self.getAuthConf()
+        try:
+            auth_method = r.headers["WWW-Authenticate"]
+        except:
+            auth_method = None
+        if auth_method:
+            auth_method = auth_method.lower()
+            if auth_method == "basic":
+                self._auth = requests.HTTPBasicAuth(conf["username"], conf["password"])
+            elif auth_method == "digest":
+                self._auth[self.host] = requests.HTTPDigestAuth(conf["username"], conf["password"])
+            elif auth_method == "sidauth":
+                self._auth[self.host] = SIDAuth(self.host, self.port, conf["username"], conf["password"])
+            else:
+                LOG.info("unknown auth {}".format(auth_method))
+                return
+        else:
+            # RFC 2616 requires a WWW-Authenticate header in 401 responses. If
+            # we get here, it was missing. Check if there is configuration that
+            # declares an auth method and use that.
+            LOG.info("makeRequest: 401 but no WWW-Authenticate")
+            if conf["auth"] and conf["auth"].lower() == "sidauth":
+                self._auth = SIDAuth(self.host, self.port, conf["username"], conf["password"])
+
+        # try again
+
+        r, json_data = self.__makeRequest(request)
+
     return (r.status_code, json_data)
 
