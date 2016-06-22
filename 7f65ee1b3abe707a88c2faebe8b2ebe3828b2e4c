@@ -1,0 +1,8 @@
+Code-Review+2: Vitaliy Kharechko <vitaliy.kharechko@axilera.com>
+Workflow+1: Syd Logan <syd.logan@broadcom.com>
+Verified+2: Jenkins
+Submitted-by: Jenkins
+Submitted-at: Wed, 22 Jun 2016 15:53:52 +0000
+Reviewed-on: https://review.openstack.org/332770
+Project: openstack/broadview-lib
+Branch: refs/heads/master
