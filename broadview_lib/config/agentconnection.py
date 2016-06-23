@@ -58,7 +58,7 @@ class AgentConnection():
     self._auth = None
 
   def close(self):
-    if self._auth.logout:
+    if self._auth and self._auth.logout:
         self._auth.logout()
     self._auth = None
 
