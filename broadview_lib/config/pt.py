@@ -20,7 +20,7 @@ import unittest
 class ConfigurePacketTraceFeature(AgentAPI):
     def __init__(self, host, port):
         super(ConfigurePacketTraceFeature, self).__init__()
-        self.setFeature("pt")
+        self.setFeature("packettrace")
         self.setHttpMethod("POST")
         self.setHost(host)
         self.setPort(port)
@@ -50,7 +50,7 @@ class ConfigurePacketTraceFeature(AgentAPI):
 class ConfigurePacketTraceDropReason(AgentAPI):
     def __init__(self, host, port):
         super(ConfigurePacketTraceDropReason, self).__init__()
-        self.setFeature("pt")
+        self.setFeature("packettrace")
         self.setHttpMethod("POST")
         self.setHost(host)
         self.setPort(port)
@@ -104,7 +104,7 @@ class ConfigurePacketTraceDropReason(AgentAPI):
 class CancelPacketTraceProfile(AgentAPI):
     def __init__(self, host, port):
         super(CancelPacketTraceProfile, self).__init__()
-        self.setFeature("pt")
+        self.setFeature("packettrace")
         self.setHttpMethod("POST")
         self.setHost(host)
         self.setPort(port)
@@ -134,7 +134,7 @@ class CancelPacketTraceProfile(AgentAPI):
 class CancelPacketTraceLAGResolution(AgentAPI):
     def __init__(self, host, port):
         super(CancelPacketTraceLAGResolution, self).__init__()
-        self.setFeature("pt")
+        self.setFeature("packettrace")
         self.setHttpMethod("POST")
         self.setHost(host)
         self.setPort(port)
@@ -163,7 +163,7 @@ class CancelPacketTraceLAGResolution(AgentAPI):
 class CancelPacketTraceECMPResolution(AgentAPI):
     def __init__(self, host, port):
         super(CancelPacketTraceECMPResolution, self).__init__()
-        self.setFeature("pt")
+        self.setFeature("packettrace")
         self.setHttpMethod("POST")
         self.setHost(host)
         self.setPort(port)
@@ -192,7 +192,7 @@ class CancelPacketTraceECMPResolution(AgentAPI):
 class CancelPacketTraceSendDropPacket(AgentAPI):
     def __init__(self, host, port):
         super(CancelPacketTraceSendDropPacket, self).__init__()
-        self.setFeature("pt")
+        self.setFeature("packettrace")
         self.setHttpMethod("POST")
         self.setHost(host)
         self.setPort(port)
@@ -226,7 +226,7 @@ class CancelPacketTraceSendDropPacket(AgentAPI):
 class CancelPacketTraceDropCounterReport(AgentAPI):
     def __init__(self, host, port):
         super(CancelPacketTraceDropCounterReport, self).__init__()
-        self.setFeature("pt")
+        self.setFeature("packettrace")
         self.setHttpMethod("POST")
         self.setHost(host)
         self.setPort(port)
@@ -266,7 +266,7 @@ Status/Reporting Requests
 class GetPacketTraceFeature(AgentAPI):
     def __init__(self, host, port):
         super(GetPacketTraceFeature, self).__init__()
-        self.setFeature("pt")
+        self.setFeature("packettrace")
         self.setHttpMethod("POST")
         self.setHost(host)
         self.setPort(port)
@@ -306,7 +306,7 @@ class GetPacketTraceFeature(AgentAPI):
 class GetPacketTraceLAGResolution(AgentAPI):
     def __init__(self, host, port):
         super(GetPacketTraceLAGResolution, self).__init__()
-        self.setFeature("pt")
+        self.setFeature("packettrace")
         self.setHttpMethod("POST")
         self.setHost(host)
         self.setPort(port)
@@ -365,7 +365,7 @@ class GetPacketTraceLAGResolution(AgentAPI):
 class GetPacketTraceECMPResolution(AgentAPI):
     def __init__(self, host, port):
         super(GetPacketTraceECMPResolution, self).__init__()
-        self.setFeature("pt")
+        self.setFeature("packettrace")
         self.setHttpMethod("POST")
         self.setHost(host)
         self.setPort(port)
@@ -424,7 +424,7 @@ class GetPacketTraceECMPResolution(AgentAPI):
 class GetPacketTraceProfile(AgentAPI):
     def __init__(self, host, port):
         super(GetPacketTraceProfile, self).__init__()
-        self.setFeature("pt")
+        self.setFeature("packettrace")
         self.setHttpMethod("POST")
         self.setHost(host)
         self.setPort(port)
@@ -483,7 +483,7 @@ class GetPacketTraceProfile(AgentAPI):
 class GetPacketTraceDropReason(AgentAPI):
     def __init__(self, host, port):
         super(GetPacketTraceDropReason, self).__init__()
-        self.setFeature("pt")
+        self.setFeature("packettrace")
         self.setHttpMethod("POST")
         self.setHost(host)
         self.setPort(port)
@@ -518,7 +518,7 @@ class GetPacketTraceDropReason(AgentAPI):
 class GetPacketTraceDropCounterReport(AgentAPI):
     def __init__(self, host, port):
         super(GetPacketTraceDropCounterReport, self).__init__()
-        self.setFeature("pt")
+        self.setFeature("packettrace")
         self.setHttpMethod("POST")
         self.setHost(host)
         self.setPort(port)
@@ -563,7 +563,7 @@ class GetPacketTraceDropCounterReport(AgentAPI):
 class GetPacketTraceSupportedDropReasons(AgentAPI):
     def __init__(self, host, port):
         super(GetPacketTraceSupportedDropReasons, self).__init__()
-        self.setFeature("pt")
+        self.setFeature("packettrace")
         self.setHttpMethod("POST")
         self.setHost(host)
         self.setPort(port)
@@ -616,7 +616,7 @@ class TestPTAPIParams(unittest.TestCase):
         self.assertTrue("asic-id" in d)
         self.assertTrue("params" in d)
         self.assertTrue("method" in d)
-        self.assertTrue(x.getFeature() == "pt")
+        self.assertTrue(x.getFeature() == "packettrace")
         self.assertTrue(x.getHttpMethod() == "POST")
         self.assertTrue(x.getHost() == host)
         self.assertTrue(x.getPort() == port)
@@ -654,7 +654,7 @@ class TestPTAPIParams(unittest.TestCase):
         self.assertTrue("asic-id" in d)
         self.assertTrue("params" in d)
         self.assertTrue("method" in d)
-        self.assertTrue(x.getFeature() == "pt")
+        self.assertTrue(x.getFeature() == "packettrace")
         self.assertTrue(x.getHttpMethod() == "POST")
         self.assertTrue(x.getHost() == host)
         self.assertTrue(x.getPort() == port)
@@ -705,7 +705,7 @@ class TestPTAPIParams(unittest.TestCase):
         self.assertTrue("asic-id" in d)
         self.assertTrue("params" in d)
         self.assertTrue("method" in d)
-        self.assertTrue(x.getFeature() == "pt")
+        self.assertTrue(x.getFeature() == "packettrace")
         self.assertTrue(x.getHttpMethod() == "POST")
         self.assertTrue(x.getHost() == host)
         self.assertTrue(x.getPort() == port)
@@ -734,7 +734,7 @@ class TestPTAPIParams(unittest.TestCase):
         self.assertTrue("asic-id" in d)
         self.assertTrue("params" in d)
         self.assertTrue("method" in d)
-        self.assertTrue(x.getFeature() == "pt")
+        self.assertTrue(x.getFeature() == "packettrace")
         self.assertTrue(x.getHttpMethod() == "POST")
         self.assertTrue(x.getHost() == host)
         self.assertTrue(x.getPort() == port)
@@ -763,7 +763,7 @@ class TestPTAPIParams(unittest.TestCase):
         self.assertTrue("asic-id" in d)
         self.assertTrue("params" in d)
         self.assertTrue("method" in d)
-        self.assertTrue(x.getFeature() == "pt")
+        self.assertTrue(x.getFeature() == "packettrace")
         self.assertTrue(x.getHttpMethod() == "POST")
         self.assertTrue(x.getHost() == host)
         self.assertTrue(x.getPort() == port)
@@ -792,7 +792,7 @@ class TestPTAPIParams(unittest.TestCase):
         self.assertTrue("asic-id" in d)
         self.assertTrue("params" in d)
         self.assertTrue("method" in d)
-        self.assertTrue(x.getFeature() == "pt")
+        self.assertTrue(x.getFeature() == "packettrace")
         self.assertTrue(x.getHttpMethod() == "POST")
         self.assertTrue(x.getHost() == host)
         self.assertTrue(x.getPort() == port)
@@ -831,7 +831,7 @@ class TestPTAPIParams(unittest.TestCase):
         self.assertTrue("asic-id" in d)
         self.assertTrue("params" in d)
         self.assertTrue("method" in d)
-        self.assertTrue(x.getFeature() == "pt")
+        self.assertTrue(x.getFeature() == "packettrace")
         self.assertTrue(x.getHttpMethod() == "POST")
         self.assertTrue(x.getHost() == host)
         self.assertTrue(x.getPort() == port)
@@ -870,7 +870,7 @@ class TestPTAPIParams(unittest.TestCase):
         self.assertTrue("asic-id" in d)
         self.assertTrue("params" in d)
         self.assertTrue("method" in d)
-        self.assertTrue(x.getFeature() == "pt")
+        self.assertTrue(x.getFeature() == "packettrace")
         self.assertTrue(x.getHttpMethod() == "POST")
         self.assertTrue(x.getHost() == host)
         self.assertTrue(x.getPort() == port)
@@ -898,7 +898,7 @@ class TestPTAPIParams(unittest.TestCase):
         self.assertTrue("asic-id" in d)
         self.assertTrue("params" in d)
         self.assertTrue("method" in d)
-        self.assertTrue(x.getFeature() == "pt")
+        self.assertTrue(x.getFeature() == "packettrace")
         self.assertTrue(x.getHttpMethod() == "POST")
         self.assertTrue(x.getHost() == host)
         self.assertTrue(x.getPort() == port)
@@ -946,7 +946,7 @@ class TestPTAPIParams(unittest.TestCase):
         self.assertTrue("asic-id" in d)
         self.assertTrue("params" in d)
         self.assertTrue("method" in d)
-        self.assertTrue(x.getFeature() == "pt")
+        self.assertTrue(x.getFeature() == "packettrace")
         self.assertTrue(x.getHttpMethod() == "POST")
         self.assertTrue(x.getHost() == host)
         self.assertTrue(x.getPort() == port)
@@ -993,7 +993,7 @@ class TestPTAPIParams(unittest.TestCase):
         self.assertTrue("asic-id" in d)
         self.assertTrue("params" in d)
         self.assertTrue("method" in d)
-        self.assertTrue(x.getFeature() == "pt")
+        self.assertTrue(x.getFeature() == "packettrace")
         self.assertTrue(x.getHttpMethod() == "POST")
         self.assertTrue(x.getHost() == host)
         self.assertTrue(x.getPort() == port)
@@ -1041,7 +1041,7 @@ class TestPTAPIParams(unittest.TestCase):
         self.assertTrue("asic-id" in d)
         self.assertTrue("params" in d)
         self.assertTrue("method" in d)
-        self.assertTrue(x.getFeature() == "pt")
+        self.assertTrue(x.getFeature() == "packettrace")
         self.assertTrue(x.getHttpMethod() == "POST")
         self.assertTrue(x.getHost() == host)
         self.assertTrue(x.getPort() == port)
@@ -1069,7 +1069,7 @@ class TestPTAPIParams(unittest.TestCase):
         self.assertTrue("asic-id" in d)
         self.assertTrue("params" in d)
         self.assertTrue("method" in d)
-        self.assertTrue(x.getFeature() == "pt")
+        self.assertTrue(x.getFeature() == "packettrace")
         self.assertTrue(x.getHttpMethod() == "POST")
         self.assertTrue(x.getHost() == host)
         self.assertTrue(x.getPort() == port)
@@ -1113,7 +1113,7 @@ class TestPTAPIParams(unittest.TestCase):
         self.assertTrue("asic-id" in d)
         self.assertTrue("params" in d)
         self.assertTrue("method" in d)
-        self.assertTrue(x.getFeature() == "pt")
+        self.assertTrue(x.getFeature() == "packettrace")
         self.assertTrue(x.getHttpMethod() == "POST")
         self.assertTrue(x.getHost() == host)
         self.assertTrue(x.getPort() == port)
