@@ -15,6 +15,10 @@
 host=10.14.244.128
 port=8082
 
+echo "********** get-switch-properties **********"
+python bv-ctl.py get-switch-properties timeout:30 host:$host port:$port 
+echo "********** get-system-feature **********"
+python bv-ctl.py get-system-feature timeout:30 host:$host port:$port 
 echo "********** cfg-feature **********"
 python bv-bstctl.py cfg-feature timeout:30 host:$host port:$port enable send_async_reports
 echo "********** get-feature **********"
