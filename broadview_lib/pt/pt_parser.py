@@ -66,7 +66,11 @@ class PTParser():
 
     def _handlePacketTraceProfile(self, data):
         ret = True
-        report = data["report"]
+        try:
+            report = data["report"]
+        except:
+            ret = False
+            report = [] 
         for x in report:
             t = packet_trace_profile.PacketTraceProfile()
             if "port" in x:
@@ -92,7 +96,11 @@ class PTParser():
 
     def _handlePacketTraceLAGResolution(self, data):
         ret = True
-        report = data["report"]
+        try:
+            report = data["report"]
+        except:
+            ret = False
+            report = []
         for x in report:
             t = packet_trace_lag_resolution.PacketTraceLAGResolution()
             if "port" in x:
@@ -113,7 +121,11 @@ class PTParser():
 
     def _handlePacketTraceECMPResolution(self, data):
         ret = True
-        report = data["report"]
+        try:
+            report = data["report"]
+        except:
+            report = []
+            ret = False
         for x in report:
             t = packet_trace_ecmp_resolution.PacketTraceECMPResolution()
             if "port" in x:
@@ -134,7 +146,11 @@ class PTParser():
 
     def _handlePacketTraceDropReason(self, data):
         ret = True
-        report = data["result"]
+        try:
+            report = data["result"]
+        except:
+            report = []
+            ret = False
         for x in report:
             t = packet_trace_drop_reason.PacketTraceDropReason()
             ret = t.parse(x)
@@ -164,7 +180,11 @@ class PTParser():
 
     def _handlePacketTraceDropCounterReport(self, data):
         ret = True
-        report = data["report"]
+        try:
+            report = data["report"]
+        except:
+            ret = False
+            report = []
         for x in report:
             t = packet_trace_drop_counter_report.PacketTraceDropCounterReport()
             ret = t.parse(x)

@@ -15,46 +15,64 @@
 host=10.14.244.128
 port=8082
 
-echo "********** get-switch-properties **********"
-python bv-ctl.py get-switch-properties timeout:30 host:$host port:$port 
 echo "********** get-system-feature **********"
 python bv-ctl.py get-system-feature timeout:30 host:$host port:$port 
-echo "********** cfg-feature **********"
+echo "********** get-switch-properties **********"
+python bv-ctl.py get-switch-properties timeout:30 host:$host port:$port 
+
+echo "********** bst cfg-feature **********"
 python bv-bstctl.py cfg-feature timeout:30 host:$host port:$port enable send_async_reports
-echo "********** get-feature **********"
+echo "********** bst get-feature **********"
 python bv-bstctl.py get-feature host:$host port:$port 
-echo "********** cfg-tracking **********"
+echo "********** bst cfg-tracking **********"
 python bv-bstctl.py cfg-tracking host:$host port:$port track_ingress_port_priority_group
-echo "********** get-tracking **********"
+echo "********** bst get-tracking **********"
 python bv-bstctl.py get-tracking host:$host port:$port 
-echo "********** clr-statistics **********"
+echo "********** bst clr-statistics **********"
 python bv-bstctl.py clr-statistics host:$host port:$port 
-echo "********** clr-thresholds **********"
+echo "********** bst clr-thresholds **********"
 python bv-bstctl.py clr-thresholds host:$host port:$port 
-echo "********** cfg-thresholds **********"
+echo "********** bst cfg-thresholds **********"
 python bv-bstctl.py get-thresholds host:$host port:$port include_ingress_port_priority_group include_ingress_port_service_pool include_ingress_service_pool include_egress_port_service_pool include_egress_service_pool
-echo "********** get-report **********"
+echo "********** bst get-report **********"
 python bv-bstctl.py get-report host:$host port:$port include_ingress_port_priority_group include_ingress_port_service_pool include_ingress_service_pool include_egress_port_service_pool include_egress_service_pool
-echo "********** cfg-thresholds device **********"
+echo "********** bst cfg-thresholds device **********"
 python bv-bstctl.py cfg-thresholds host:$host port:$port device:10100 
-echo "********** cfg-thresholds egress-cpu-queue **********"
+echo "********** bst cfg-thresholds egress-cpu-queue **********"
 python bv-bstctl.py cfg-thresholds host:$host port:$port egress-cpu-queue:5:20202
-echo "********** cfg-thresholds egress-rqe-queue **********"
+echo "********** bst cfg-thresholds egress-rqe-queue **********"
 python bv-bstctl.py cfg-thresholds host:$host port:$port egress-rqe-queue:6:30130 
-echo "********** cfg-thresholds egress-port-service-pool **********"
+echo "********** bst cfg-thresholds egress-port-service-pool **********"
 python bv-bstctl.py cfg-thresholds host:$host port:$port egress-port-service-pool:"2":2:204556:30000:40000:5000 
-echo "********** cfg-thresholds egress-service-pool **********"
+echo "********** bst cfg-thresholds egress-service-pool **********"
 python bv-bstctl.py cfg-thresholds host:$host port:$port egress-service-pool:2:30:40:50
-echo "********** cfg-thresholds egress-uc-queue **********"
+echo "********** bst cfg-thresholds egress-uc-queue **********"
 python bv-bstctl.py cfg-thresholds host:$host port:$port egress-uc-queue:5:20200 
-echo "********** cfg-thresholds egress-uc-queue-group **********"
+echo "********** bst cfg-thresholds egress-uc-queue-group **********"
 python bv-bstctl.py cfg-thresholds host:$host port:$port egress-uc-queue-group:5:204
-echo "********** cfg-thresholds egress-mc-queue **********"
+echo "********** bst cfg-thresholds egress-mc-queue **********"
 python bv-bstctl.py cfg-thresholds host:$host port:$port egress-mc-queue:5:204:10500
-echo "********** cfg-thresholds ingress-port-priority-group **********"
+echo "********** bst cfg-thresholds ingress-port-priority-group **********"
 python bv-bstctl.py cfg-thresholds host:$host port:$port ingress-port-priority-group:"5":2:20456:40404 
-echo "********** cfg-thresholds ingress-port-service-pool **********"
+echo "********** bst cfg-thresholds ingress-port-service-pool **********"
 python bv-bstctl.py cfg-thresholds host:$host port:$port ingress-port-service-pool:"4":2:50505
-echo "********** cfg-thresholds ingress-service-pool **********"
+echo "********** bst cfg-thresholds ingress-service-pool **********"
 python bv-bstctl.py cfg-thresholds host:$host port:$port ingress-service-pool:2:56783 
-#
+
+echo "********** pt cfg-feature **********"
+python bv-ptctl.py cfg-feature timeout:30 host:$host port:$port enable 
+echo "********** pt get-feature **********"
+python bv-ptctl.py get-feature timeout:30 host:$host port:$port 
+echo "********** pt cfg-feature **********"
+python bv-ptctl.py cfg-feature timeout:30 host:$host port:$port disable 
+echo "********** pt get-feature **********"
+python bv-ptctl.py get-feature timeout:30 host:$host port:$port 
+echo "********** pt cancel-profile **********"
+python bv-ptctl.py cancel-profile timeout:30 host:$host port:$port 
+echo "********** pt cancel-lag-resolution **********"
+python bv-ptctl.py cancel-lag-resolution timeout:30 host:$host port:$port 
+echo "********** pt cancel-ecmp-resolution **********"
+python bv-ptctl.py cancel-ecmp-resolution timeout:30 host:$host port:$port 
+echo "********** pt get-profile **********"
+python bv-ptctl.py get-profile drop-packet:1 collection-interval:45 timeout:30 host:$host port:$port 
+

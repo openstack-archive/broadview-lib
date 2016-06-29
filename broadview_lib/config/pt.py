@@ -355,7 +355,7 @@ class GetPacketTraceLAGResolution(AgentAPI):
         params["packet"] = self.__packet
         params["port-list"] = self.__port_list
         params["collection-interval"] = self.__collection_interval
-        params["drop-packet"] = self.__drop_packet = 1 if self.__drop_packet else 0
+        params["drop-packet"] = 1 if self.__drop_packet else 0
         
         ret["asic-id"] = self.__asic_id
         ret["params"] = params
@@ -414,7 +414,7 @@ class GetPacketTraceECMPResolution(AgentAPI):
         params["packet"] = self.__packet
         params["port-list"] = self.__port_list
         params["collection-interval"] = self.__collection_interval
-        params["drop-packet"] = self.__drop_packet = 1 if self.__drop_packet else 0
+        params["drop-packet"] = 1 if self.__drop_packet else 0
         
         ret["asic-id"] = self.__asic_id
         ret["params"] = params
@@ -473,7 +473,7 @@ class GetPacketTraceProfile(AgentAPI):
         params["packet"] = self.__packet
         params["port-list"] = self.__port_list
         params["collection-interval"] = self.__collection_interval
-        params["drop-packet"] = self.__drop_packet = 1 if self.__drop_packet else 0
+        params["drop-packet"] = 1 if self.__drop_packet else 0
         
         ret["asic-id"] = self.__asic_id
         ret["params"] = params

@@ -34,16 +34,16 @@ flows. The actual use-counts vary depending on the chip set.
 
 More information on BroadView, BST, and what they provide can be found at:
 
-Code and documentation: https://github.com/Broadcom-Switch/BroadView-Instrumentation 
-Product information: https://www.broadcom.com/products/ethernet-communication-and-switching/switching/broadview
+* Code and documentation: https://github.com/Broadcom-Switch/BroadView-Instrumentation 
+* Product information: https://www.broadcom.com/products/ethernet-communication-and-switching/switching/broadview
 
 ## BroadView Agent and broadview-lib
 
 A BroadView agent is software running on platforms that support BroadView. It
 exposes a JSON-RPC, REST-like API for configuring the agent to report statistics
-such a BST. It also report statistics to agents or collectors that are designed 
-to receive these reports. These reports are also transmitted using JSON-RPC.
-All connections to and from the agent are based on HTTP 1.1.
+such as BST. It also report statistics to agents or collectors that are 
+designed to receive these reports. These reports are also transmitted using 
+JSON-RPC.  All connections to and from the agent are based on HTTP 1.1.
 
 broadview-lib is designed to provide the underlying infrastructure that is
 needed for the development of Python applications that interact with a 
@@ -62,28 +62,60 @@ broadview-lib consists of two components. One is a set of classes that can
 be used to configure BroadView. The other is an API that parses content
 sent by BroadView agents and presents it as Python objects. 
 
-broadview-lib is, like BroadView itself, designed to be extensible. In this
-release, the BroadView BST component is supported. Future releases will add
-support for additional BroadView components as they become available.
+broadview-lib is, like BroadView itself, designed to be extensible. Currently 
+the BroadView BST and PacketTrace components are supported. Future releases 
+will add support for additional BroadView components as they become available.
 
 # Tools
 
-broadview-lib includes bv-bstctl.py, which is a command line application that 
-can be used to configure BroadView BST. It also provides an example usage of 
-both the configuration and BST parsing APIs in broadview-lib. For usage 
-information, please type:
+broadview-lib includes command line tools that make use of broadview-lib to
+to issue supported commands for querying and configuring BroadView. Each 
+command line tool is paired to a specific component of BroadView (BST, 
+PacketTrace, etc).
 
-python bv-bstcfg.py help
+Each of these commands supports a "help" argument that will print usage
+information. For commands that retrieve a JSON response from the agent, 
+the JSON response will be written to stdout.
 
+The file examples.sh in the tools directory contains example invocations
+of the supported commands.
 
-bv-bstctl.py writes its output to stdout in JSON format.
+Each of the commands provides example usage of broadview-lib APIs and thus
+can be used as inspiration for your own broadview-lib applications.
 
-The file examples.sh in the tools directory contains usage example for the
-bv-bstcfg application and can be used to exercise bv-bsctl.
+### bv-bstctl.py
+
+A command line application that can be used to configure BroadView BST. 
+
+### bv-ptctl.py
+
+A command line application that can be used to configure BroadView PacketTrace. 
+
+### bv-ctl.py
+
+A command line application that can be used to issue general BroadView
+commands for querying the supported features of BroadView, etc.
 
 # Classes
 
-The following describes the major classes in the library.
+The following describes the major classes in the library. 
+
+## General 
+
+The broadview.py file in config contains general configuration classes for
+BroadView.
+
+The following briefly summarizes these classes. For example usage, see the
+unit test code in broadview.py, or the bv-ctl.py application.
+
+### GetSwitchProperties
+
+This command is used to retrieve the switch properties.
+
+### GetSystemFeature
+
+This command is used to retrieve the current configuration of the System 
+module on the Agent.
 
 ## BST Configuration and Data Gathering
 
@@ -109,17 +141,17 @@ the configuration of thresholds for the various statistics (realms) that
 are supported by BST. The following is a list of these subclasses, one for
 each supported BST realm:
 
-device - ConfigureDeviceThreshold 
-egress-cpu-queue - ConfigureEgressCpuQueueThreshold
-egress-rqe-queue - ConfigureEgressRqeQueueThreshold
-egress-port-service-pool - ConfigureEgressPortServicePoolThreshold
-egress-service-pool - ConfigureEgressServicePoolThreshold
-egress-uc-queue - ConfigureEgressUcQueueThreshold
-egress-uc-queue-group - ConfigureEgressUcQueueGroupThreshold
-egress-mc-queue - ConfigureEgressMcQueueThreshold
-ingress-port-priority-group - ConfigureIngressPortPriorityGroupThreshold
-ingress-port-service-pool - ConfigureIngressPortServicePoolThreshold
-ingress-service-pool - ConfigureIngressServicePoolThreshold
+* device - ConfigureDeviceThreshold 
+* egress-cpu-queue - ConfigureEgressCpuQueueThreshold
+* egress-rqe-queue - ConfigureEgressRqeQueueThreshold
+* egress-port-service-pool - ConfigureEgressPortServicePoolThreshold
+* egress-service-pool - ConfigureEgressServicePoolThreshold
+* egress-uc-queue - ConfigureEgressUcQueueThreshold
+* egress-uc-queue-group - ConfigureEgressUcQueueGroupThreshold
+* egress-mc-queue - ConfigureEgressMcQueueThreshold
+* ingress-port-priority-group - ConfigureIngressPortPriorityGroupThreshold
+* ingress-port-service-pool - ConfigureIngressPortServicePoolThreshold
+* ingress-service-pool - ConfigureIngressServicePoolThreshold
 
 ### ClearBSTStatistics
 
@@ -151,6 +183,88 @@ This class reports the current buffer statistics for the specified realms.
 The class BSTParser (found in bst/bst_parser.py) accepts the JSON payload
 that is sent by a BroadView agent for BST notifications and responses that
 contain BST threshold reports.
+
+## Packet Trace Configuration 
+
+The pt.py file in config contains various classes that wrap the BroadView
+packet trace protocol.
+
+The following briefly summarizes these classes. For example usage, see the
+unit test code in pt.py, or the bv-ptctl.py application.
+
+### ConfigurePacketTraceFeature
+
+This class can be used to provide general configuration of the BroadView
+packet trace component.
+
+### ConfigurePacketTraceDropReason
+
+This command configures the agent to send a copy of dropped packets and/or 
+trace-profile to requestor asynchronously.
+
+### CancelPacketTraceProfile
+
+This command is used to cancel the trace-profile request previously initiated 
+by GetPacketTraceProfile.
+
+### CancelPacketTraceLAGResolution
+
+This command is used to cancel the lag-resolution request previously 
+initiated by GetPacketTraceLAGResolution.
+
+### CancelPacketTraceECMPResolution
+
+This command is used to cancel the ecmp-resolution request previously 
+initiated by GetPacketTraceECMPResolution.
+
+### CancelPacketTraceSendDropPacket
+
+This command is used to cancel the send-dropped-packet request for a given 
+list of ports. This command allows canceling of send-dropped-packet request 
+for multiple drop reasons at a time.
+
+### CancelPacketTraceDropCounterReport
+
+This command is used to cancel the drop-counter-report request for a given 
+list of ports. This command allows canceling of drop-counter-report request 
+for multiple drop reasons at a time.
+
+### GetPacketTraceFeature
+
+This command is used to retrieve the current configuration of the Packet Trace
+functionality on the Agent
+
+### GetPacketTraceLAGResolution
+
+This command is used to retrieve the LAG resolution for the given packet.
+
+### GetPacketTraceECMPResolution
+
+This command is used to retrieve the ECMP resolution for the given packet.
+
+### GetPacketTraceProfile
+
+This command is used to retrieve the trace-profile for the given packet.
+
+### GetPacketTraceDropReason
+
+This command is used to retrieve the current configured drop reasons on the
+Broadcom ASIC.
+
+### GetPacketTraceDropCounterReport
+
+This command is used to retrieve the drop counter-report. 
+
+### GetPacketTraceSupportedDropReasons
+
+This command is used to retrieve the supported drop reasons on the Broadcom
+ASIC.
+
+## PTParser Object
+
+The class PTParser (found in pt/pt_parser.py) accepts the JSON payload
+that is sent by a BroadView agent for PacketTrace, and converts this 
+payload into Python objects. It provides an API for accessing these objects.
 
 ## Unit tests
 
