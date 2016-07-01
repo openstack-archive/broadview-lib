@@ -22,7 +22,9 @@ import time
 import unittest
 
 class ReportTypes:
-    PacketTraceProfile, PacketTraceLAGResolution, PacketTraceECMPResolution, PacketTraceDropReason, PacketTraceDropReasons, PacketTraceDropCounterReport = range(6)
+    PacketTraceProfile, PacketTraceLAGResolution, \
+    PacketTraceECMPResolution, PacketTraceDropReason, \
+    PacketTraceSupportedDropReasons, PacketTraceDropCounterReport = range(6)
 
 class PTParser():
     def __init__(self):
@@ -30,7 +32,7 @@ class PTParser():
         self.__packet_trace_profile = []
         self.__packet_trace_lag_resolution = []
         self.__packet_trace_ecmp_resolution = []
-        self.__packet_trace_drop_reasons = None
+        self.__packet_trace_supported_drop_reasons = None
         self.__packet_trace_drop_reason = []
         self.__packet_trace_drop_counter_report = []
 
@@ -38,7 +40,7 @@ class PTParser():
                                  self._handlePacketTraceLAGResolution,
                                  self._handlePacketTraceECMPResolution, 
                                  self._handlePacketTraceDropReason,
-                                 self._handlePacketTraceDropReasons,
+                                 self._handlePacketTraceSupportedDropReasons,
                                  self._handlePacketTraceDropCounterReport]
 
     def getReportType(self):
@@ -164,19 +166,19 @@ class PTParser():
     def getPacketTraceDropReason(self):
         return self.__packet_trace_drop_reason
 
-    def _handlePacketTraceDropReasons(self, data):
+    def _handlePacketTraceSupportedDropReasons(self, data):
         ret = True
         result = data["result"]
-        t = packet_trace_drop_reasons.PacketTraceDropReasons()
+        t = packet_trace_drop_reasons.PacketTraceSupportedDropReasons()
         ret = t.parse(result)
         if ret:
-            self.__packet_trace_drop_reasons = t
+            self.__packet_trace_supported_drop_reasons = t
         else:
             ret = False
         return ret
 
-    def getPacketTraceDropReasons(self):
-        return self.__packet_trace_drop_reasons
+    def getPacketTraceSupportedDropReasons(self):
+        return self.__packet_trace_supported_drop_reasons
 
     def _handlePacketTraceDropCounterReport(self, data):
         ret = True
@@ -209,8 +211,8 @@ class PTParser():
                 self.__reportType = ReportTypes.PacketTraceECMPResolution
             elif data["method"] == "get-packet-trace-drop-reason":
                 self.__reportType = ReportTypes.PacketTraceDropReason
-            elif data["method"] == "get-packet-trace-drop-reasons":
-                self.__reportType = ReportTypes.PacketTraceDropReasons
+            elif data["method"] == "get-packet-trace-supported-drop-reasons":
+                self.__reportType = ReportTypes.PacketTraceSupportedDropReasons
             elif data["method"] == "get-packet-trace-drop-counter-report":
                 self.__reportType = ReportTypes.PacketTraceDropCounterReport
             else:
@@ -246,7 +248,7 @@ class PTParser():
                data["method"] != "get-packet-trace-lag-resolution" and \
                data["method"] != "get-packet-trace-ecmp-resolution" and \
                data["method"] != "get-packet-trace-drop-reason" and \
-               data["method"] != "get-packet-trace-drop-reasons" and \
+               data["method"] != "get-packet-trace-supported-drop-reasons" and \
                data["method"] != "get-packet-trace-drop-counter-report":
                 ret = False
         else:
@@ -256,7 +258,7 @@ class PTParser():
             for x in keys:
                 if not x in data:
                     if x == "time-stamp":
-                        if data["method"] == "get-packet-trace-drop-reasons":
+                        if data["method"] == "get-packet-trace-supported-drop-reasons":
                             continue
                         if data["method"] == "get-packet-trace-drop-reason":
                             continue
@@ -1022,7 +1024,7 @@ class TestParser(unittest.TestCase):
             "id": 1
         }
 
-        self.packet_trace_drop_reasons_unknown_method = {
+        self.packet_trace_supported_drop_reasons_unknown_method = {
             "jsonrpc": "2.0",
             "method": "get-packet-gummy-drop-reasons",
             "asic-id": "1",
@@ -1035,35 +1037,35 @@ class TestParser(unittest.TestCase):
         }
 
 
-        self.packet_trace_drop_reasons_report_dict = {
+        self.packet_trace_supported_drop_reasons_report_dict = {
             "jsonrpc": "2.0",
-            "method": "get-packet-trace-drop-reasons",
+            "method": "get-packet-trace-supported-drop-reasons",
             "asic-id": "1",
             "version": "1",
             "result": {},
             "id": 1
         }
 
-        self.packet_trace_drop_reasons_empty_report = {
+        self.packet_trace_supported_drop_reasons_empty_report = {
             "jsonrpc": "2.0",
-            "method": "get-packet-trace-drop-reasons",
+            "method": "get-packet-trace-supported-drop-reasons",
             "asic-id": "1",
             "version": "1",
             "result": [],
             "id": 1
         }
 
-        self.packet_trace_drop_reasons_missing_report = {
+        self.packet_trace_supported_drop_reasons_missing_report = {
             "jsonrpc": "2.0",
-            "method": "get-packet-trace-drop-reasons",
+            "method": "get-packet-trace-supported-drop-reasons",
             "asic-id": "1",
             "version": "1",
             "id": 1
         }
 
-        self.packet_trace_drop_reasons = {
+        self.packet_trace_supported_drop_reasons = {
             "jsonrpc": "2.0",
-            "method": "get-packet-trace-drop-reasons",
+            "method": "get-packet-trace-supported-drop-reasons",
             "asic-id": "1",
             "version": "1",
             "result": [
@@ -1865,35 +1867,35 @@ class TestParser(unittest.TestCase):
             else:
                 self.assertEqual("unexpected port {}".format(llr.getPort()), True)
 
-    def test_packet_trace_drop_reasons_unknown_method(self):
+    def test_packet_trace_supported_drop_reasons_unknown_method(self):
         rep = PTParser()
-        ret = rep.process(self.packet_trace_drop_reasons_unknown_method)
+        ret = rep.process(self.packet_trace_supported_drop_reasons_unknown_method)
         self.assertEqual(ret, False)
 
-    def test_packet_trace_drop_reasons_report_dict(self):
+    def test_packet_trace_supported_drop_reasons_report_dict(self):
         rep = PTParser()
-        ret = rep.process(self.packet_trace_drop_reasons_report_dict)
+        ret = rep.process(self.packet_trace_supported_drop_reasons_report_dict)
         self.assertEqual(ret, False)
 
-    def test_packet_trace_drop_reasons_empty_report(self):
+    def test_packet_trace_supported_drop_reasons_empty_report(self):
         rep = PTParser()
-        ret = rep.process(self.packet_trace_drop_reasons_empty_report)
+        ret = rep.process(self.packet_trace_supported_drop_reasons_empty_report)
         self.assertEqual(ret, False)
 
-    def test_packet_trace_drop_reasons_missing_report(self):
+    def test_packet_trace_supported_drop_reasons_missing_report(self):
         rep = PTParser()
-        ret = rep.process(self.packet_trace_drop_reasons_missing_report)
+        ret = rep.process(self.packet_trace_supported_drop_reasons_missing_report)
         self.assertEqual(ret, False)
 
-    def test_packet_trace_drop_reasons(self):
+    def test_packet_trace_supported_drop_reasons(self):
         rep = PTParser()
-        ret = rep.process(self.packet_trace_drop_reasons)
+        ret = rep.process(self.packet_trace_supported_drop_reasons)
         self.assertEqual(ret, True)
 
         val = rep.getReportType()
-        self.assertEqual(val, ReportTypes.PacketTraceDropReasons)
+        self.assertEqual(val, ReportTypes.PacketTraceSupportedDropReasons)
 
-        val = rep.getPacketTraceDropReasons().getReasons()
+        val = rep.getPacketTraceSupportedDropReasons().getReasons()
 
         self.assertTrue("l2-lookup-failure" in val)
         self.assertTrue("vlan-mismatch" in val)

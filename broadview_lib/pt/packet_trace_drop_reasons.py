@@ -13,7 +13,7 @@
 # limitations under the License.
 
 
-class PacketTraceDropReasons():
+class PacketTraceSupportedDropReasons():
 
     def __init__(self):
         self._reasons = []
@@ -22,7 +22,7 @@ class PacketTraceDropReasons():
         return self._reasons
 
     def __repr__(self):
-        return "packet-trace-drop-reasons"
+        return "packet-trace-supported-drop-reasons"
 
     def parse(self, data):
         ret = True
