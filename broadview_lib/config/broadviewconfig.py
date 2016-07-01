@@ -73,7 +73,6 @@ class TestBSTSwitches(unittest.TestCase):
             self.assertTrue("ip" in y)
             self.assertTrue("port" in y)
             self.assertTrue("description" in y)
-            self.assertTrue("asics" in y)
 
 if __name__ == "__main__":
     unittest.main()

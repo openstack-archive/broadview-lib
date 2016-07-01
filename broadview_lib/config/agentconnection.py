@@ -23,6 +23,7 @@ from xml.etree import ElementTree
 import json
 from sidauth import SIDAuth
 from broadview_lib.config.broadviewconfig import BroadViewBSTSwitches
+import os
 
 try:
     from oslo_log import log as logging
@@ -106,6 +107,13 @@ class AgentConnection():
         if "auth" in conf:
             auth["auth"] = conf["auth"]
 
+    if auth["auth"] == None:
+        auth["auth"] = os.getenv("BV_AUTH")
+    if auth["username"] == None:
+        auth["username"] = os.getenv("BV_USERNAME")
+    if auth["password"] == None:
+        auth["password"] = os.getenv("BV_PASSWORD", "")
+
     return auth
 
   def __makeRequest(self, request):
@@ -160,29 +168,27 @@ class AgentConnection():
         try:
             auth_method = r.headers["WWW-Authenticate"]
         except:
-            auth_method = None
+            # RFC 2616 requires a WWW-Authenticate header in 401 responses. If
+            # we get here, it was missing. Check if there is configuration that
+            # declares an auth method and use that.
+            LOG.info("makeRequest: 401 but no WWW-Authenticate")
+            auth_method = conf["auth"]
         if auth_method:
             auth_method = auth_method.lower()
             if auth_method == "basic":
                 self._auth = requests.HTTPBasicAuth(conf["username"], conf["password"])
             elif auth_method == "digest":
-                self._auth[self.host] = requests.HTTPDigestAuth(conf["username"], conf["password"])
+                self._auth = requests.HTTPDigestAuth(conf["username"], conf["password"])
             elif auth_method == "sidauth":
-                self._auth[self.host] = SIDAuth(self.host, self.port, conf["username"], conf["password"])
+                self._auth = SIDAuth(self.host, self.port, conf["username"], conf["password"])
             else:
                 LOG.info("unknown auth {}".format(auth_method))
-                return
-        else:
-            # RFC 2616 requires a WWW-Authenticate header in 401 responses. If
-            # we get here, it was missing. Check if there is configuration that
-            # declares an auth method and use that.
-            LOG.info("makeRequest: 401 but no WWW-Authenticate")
-            if conf["auth"] and conf["auth"].lower() == "sidauth":
-                self._auth = SIDAuth(self.host, self.port, conf["username"], conf["password"])
+                # return the 401 here
+                return (r.status_code, json_data)
+        
+            # try again
 
-        # try again
-
-        r, json_data = self.__makeRequest(request)
+            r, json_data = self.__makeRequest(request)
 
     return (r.status_code, json_data)
 
