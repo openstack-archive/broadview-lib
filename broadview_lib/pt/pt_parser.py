@@ -1734,7 +1734,7 @@ class TestParser(unittest.TestCase):
         val = rep.getPacketTraceLAGResolution()
 
         for m in val:
-            llr = m.getLAGLINKResolution()
+            llr = m.getLAGLinkResolution()
             if m.getPort() == "1":
                 self.assertEqual(llr.getLAGID(), "1")
 
@@ -1801,7 +1801,7 @@ class TestParser(unittest.TestCase):
         val = rep.getPacketTraceECMPResolution()
 
         for m in val:
-            llr = m.getECMPLINKResolution()
+            llr = m.getECMPLinkResolution()
             if m.getPort() == "1":
                 for x in llr:
                     if x.getECMPGroupID() == "200256":
@@ -2124,7 +2124,7 @@ class TestParser(unittest.TestCase):
             for m in n:
                 realm = m.getRealm()
                 if realm == "lag-link-resolution":
-                    llr = m.getLAGLINKResolution()
+                    llr = m.getLAGLinkResolution()
                     if m.getPort() == "1":
                         self.assertEqual(llr.getLAGID(), "2")
 
@@ -2150,7 +2150,7 @@ class TestParser(unittest.TestCase):
                     else:
                         self.assertEqual("unexpected port {}".format(llr.getPort()), True)
                 elif realm == "ecmp-link-resolution":
-                    elr = m.getECMPLINKResolution()
+                    elr = m.getECMPLinkResolution()
 
                     if m.getPort() == "1":
                         for x in elr:

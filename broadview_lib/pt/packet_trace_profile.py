@@ -28,10 +28,10 @@ class PacketTraceProfileEntry():
     def getPort(self):
         return self._port
 
-    def getLAGLINKResolution(self):
+    def getLAGLinkResolution(self):
         return self._laglinkresolution
 
-    def getECMPLINKResolution(self):
+    def getECMPLinkResolution(self):
         return self._ecmplinkresolution
 
 class PacketTraceProfile():

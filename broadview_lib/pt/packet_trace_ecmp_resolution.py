@@ -22,7 +22,7 @@ class PacketTraceECMPResolution():
     def getPort(self):
         return self._port
 
-    def getECMPLINKResolution(self):
+    def getECMPLinkResolution(self):
         return self._ecmplinkresolution
 
     def __repr__(self):

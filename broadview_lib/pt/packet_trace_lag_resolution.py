@@ -22,8 +22,11 @@ class PacketTraceLAGResolution():
     def getPort(self):
         return self._port
 
-    def getLAGLINKResolution(self):
+    def getLAGLinkResolution(self):
         return self._laglinkresolution
+
+    def __repr__(self):
+        return "packet-trace-lag-resolution"
 
     def parse(self, data, port=None):
         if port == None:
