@@ -16,9 +16,9 @@ host=10.14.244.128
 port=8082
 
 echo "********** get-system-feature **********"
-python bv-ctl.py get-system-feature timeout:30 host:$host port:$port 
+python bv-ctl.py get-system-feature timeout:30 host:$host port:$port
 echo "********** get-switch-properties **********"
-python bv-ctl.py get-switch-properties timeout:30 host:$host port:$port 
+python bv-ctl.py get-switch-properties timeout:30 host:$host port:$port
 
 echo "********** bst cfg-feature **********"
 python bv-bstctl.py cfg-feature timeout:30 host:$host port:$port enable send_async_reports
@@ -58,21 +58,3 @@ echo "********** bst cfg-thresholds ingress-port-service-pool **********"
 python bv-bstctl.py cfg-thresholds host:$host port:$port ingress-port-service-pool:"4":2:50505
 echo "********** bst cfg-thresholds ingress-service-pool **********"
 python bv-bstctl.py cfg-thresholds host:$host port:$port ingress-service-pool:2:56783 
-
-echo "********** pt cfg-feature **********"
-python bv-ptctl.py cfg-feature timeout:30 host:$host port:$port enable 
-echo "********** pt get-feature **********"
-python bv-ptctl.py get-feature timeout:30 host:$host port:$port 
-echo "********** pt cfg-feature **********"
-python bv-ptctl.py cfg-feature timeout:30 host:$host port:$port disable 
-echo "********** pt get-feature **********"
-python bv-ptctl.py get-feature timeout:30 host:$host port:$port 
-echo "********** pt cancel-profile **********"
-python bv-ptctl.py cancel-profile timeout:30 host:$host port:$port 
-echo "********** pt cancel-lag-resolution **********"
-python bv-ptctl.py cancel-lag-resolution timeout:30 host:$host port:$port 
-echo "********** pt cancel-ecmp-resolution **********"
-python bv-ptctl.py cancel-ecmp-resolution timeout:30 host:$host port:$port 
-echo "********** pt get-profile **********"
-python bv-ptctl.py get-profile drop-packet:1 collection-interval:45 timeout:30 host:$host port:$port 
-

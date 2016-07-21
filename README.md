@@ -91,6 +91,11 @@ A command line application that can be used to configure BroadView BST.
 
 A command line application that can be used to configure BroadView PacketTrace. 
 
+### bv-bhdctl.py
+
+A command line application that can be used to configure BroadView's Black
+Hole Detection feature. 
+
 ### bv-ctl.py
 
 A command line application that can be used to issue general BroadView
@@ -265,6 +270,52 @@ ASIC.
 The class PTParser (found in pt/pt_parser.py) accepts the JSON payload
 that is sent by a BroadView agent for PacketTrace, and converts this 
 payload into Python objects. It provides an API for accessing these objects.
+
+## Black Hole Detection Configuration and Reports
+
+The bhd.py file in config contains various configuration and data gathering 
+classes. 
+
+The following briefly summarizes these classes. For example usage, see the
+unit test code in bhd.py, or the bv-bhdctl.py application.
+
+### BlackHoleDetectionEnable
+
+This class can be used to enable (or disable) black hole detection.
+
+### ConfigureBlackHole
+
+This class configures the Black Hole Detection functionality on the switch.
+
+### CancelBlackHole
+
+This class nullifies the configuration made by the ConfigureBlackHole class.
+
+### GetBlackHoleDetectionEnable
+
+This class can be used to determine of black hole detection is enabled or not.
+
+### GetBlackHole
+
+This class is used to get the current configuration of black hole detection 
+on the agent.
+
+### GetBlackHoleEventReport
+
+This class is used to get a black hole event report. It is only valid if the
+agent sampling mode is configured on the agent.
+
+### GetSFlowSamplingStatus
+
+This class is used to get current sFlow sampling status of Black Holed
+traffic.
+
+## BHDParser Object
+
+The class BHDParser (found in bhd/bhd_parser.py) accepts the JSON payload
+that is sent by a BroadView agent for Black Hole Detection, and converts this 
+payload into Python objects. It provides an API for accessing the data that
+is contained in these objects.
 
 ## Unit tests
 
