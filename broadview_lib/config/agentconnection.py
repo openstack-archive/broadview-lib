@@ -98,14 +98,17 @@ class AgentConnection():
     auth["username"] = None
     auth["password"] = None
 
-    conf = self._swconfig.getByIP(self.host)
-    if conf:
-        if "username" in conf:
-            auth["username"] = conf["username"]
-        if "password" in conf:
-            auth["password"] = conf["password"]
-        if "auth" in conf:
-            auth["auth"] = conf["auth"]
+    try:
+        conf = self._swconfig.getByIP(self.host)
+        if conf:
+            if "username" in conf:
+                auth["username"] = conf["username"]
+            if "password" in conf:
+                auth["password"] = conf["password"]
+            if "auth" in conf:
+                auth["auth"] = conf["auth"]
+    except:
+        pass
 
     if auth["auth"] == None:
         auth["auth"] = os.getenv("BV_AUTH")
