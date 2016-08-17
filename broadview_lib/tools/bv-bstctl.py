@@ -155,7 +155,7 @@ class BSTConfigCommand():
             x.setAsyncFullReports("async_full_reports" in args)
             status = x.send(timeout=self._timeout)
             if status != 200:
-                print "failure: %d" % (status)
+                print "failure: {}".format(status)
 
         ret = None
         return usage, ret
@@ -195,7 +195,7 @@ class BSTConfigCommand():
             x.setTrackDevice("track_device" in args)
             status = x.send(self._timeout)
             if status != 200:
-                print "failure: %d" % (status)
+                print "failure: {}".format(status)
 
         ret = None
         return usage, ret
@@ -230,7 +230,7 @@ class BSTConfigCommand():
                         x.setASIC(asic)
                         status = x.send(self._timeout)
                         if status != 200:
-                            print "failure: %d" % (status)
+                            print "failure: {}".format(status)
                     else:
                         print "invalid device: bad argument count"
                         usage = True
@@ -243,7 +243,7 @@ class BSTConfigCommand():
                         x.setASIC(asic)
                         status = x.send(self._timeout)
                         if status != 200:
-                            print "failure: %d" % (status)
+                            print "failure: {}".format(status)
                     else:
                         print "invalid egress-cpu-queue: bad argument count"
                         usage = True
@@ -256,7 +256,7 @@ class BSTConfigCommand():
                         x.setASIC(asic)
                         status = x.send(self._timeout)
                         if status != 200:
-                            print "failure: %d" % (status)
+                            print "failure: {}".format(status)
                     else:
                         print "invalid egress-rqe-queue: bad argument count"
                         usage = True
@@ -273,7 +273,7 @@ class BSTConfigCommand():
                         x.setASIC(asic)
                         status = x.send(self._timeout)
                         if status != 200:
-                            print "failure: %d" % (status)
+                            print "failure: {}".format(status)
                     else:
                         print "invalid egress-port-service-pool: bad argument count"
                         usage = True
@@ -288,7 +288,7 @@ class BSTConfigCommand():
                         x.setASIC(asic)
                         status = x.send(self._timeout)
                         if status != 200:
-                            print "failure: %d" % (status)
+                            print "failure: {}".format(status)
                     else:
                         print "invalid egress-service-pool: bad argument count"
                         usage = True
@@ -301,7 +301,7 @@ class BSTConfigCommand():
                         x.setASIC(asic)
                         status = x.send(self._timeout)
                         if status != 200:
-                            print "failure: %d" % (status)
+                            print "failure: {}".format(status)
                     else:
                         print "invalid egress-uc-queue: bad argument count"
                         usage = True
@@ -314,7 +314,7 @@ class BSTConfigCommand():
                         x.setASIC(asic)
                         status = x.send(self._timeout)
                         if status != 200:
-                            print "failure: %d" % (status)
+                            print "failure: {}".format(status)
                     else:
                         print "invalid egress-uc-queue-group: bad argument count"
                         usage = True
@@ -328,7 +328,7 @@ class BSTConfigCommand():
                         x.setASIC(asic)
                         status = x.send(self._timeout)
                         if status != 200:
-                            print "failure: %d" % (status)
+                            print "failure: {}".format(status)
                     else:
                         print "invalid egress-mc-queue-group: bad argument count"
                         usage = True
@@ -343,7 +343,7 @@ class BSTConfigCommand():
                         x.setASIC(asic)
                         status = x.send(self._timeout)
                         if status != 200:
-                            print "failure: %d" % (status)
+                            print "failure: {}".format(status)
                     else:
                         print "invalid ingress-port-priority-group: bad argument count"
                         usage = True
@@ -357,7 +357,7 @@ class BSTConfigCommand():
                         x.setASIC(asic)
                         status = x.send(self._timeout)
                         if status != 200:
-                            print "failure: %d" % (status)
+                            print "failure: {}".format(status)
                     else:
                         print "invalid ingress-port-service-pool: bad argument count"
                         usage = True
@@ -370,7 +370,7 @@ class BSTConfigCommand():
                         x.setASIC(asic)
                         status = x.send(self._timeout)
                         if status != 200:
-                            print "failure: %d" % (status)
+                            print "failure: {}".format(status)
                     else:
                         print "invalid ingress-service-pool: bad argument count"
                         usage = True
@@ -406,7 +406,7 @@ class BSTConfigCommand():
             x.setASIC(asic)
             status = x.send(self._timeout)
             if status != 200:
-                print "failure: %d" % (status)
+                print "failure: {}".format(status)
 
         ret = None
         return usage, ret
@@ -422,7 +422,7 @@ class BSTConfigCommand():
             x.setASIC(asic)
             status = x.send(self._timeout)
             if status != 200:
-                print "failure: %d" % (status)
+                print "failure: {}".format(status)
 
         ret = None
         return usage, ret
@@ -442,7 +442,7 @@ class BSTConfigCommand():
                 ret = json.dumps(x.getJSON())
                 print ret
             else:
-                print "failure: %d" % (status)
+                print "failure: {}".format(status)
 
         return usage, ret
 
@@ -461,7 +461,7 @@ class BSTConfigCommand():
                 ret = json.dumps(x.getJSON())
                 print ret
             else:
-                print "failure: %d" % (status)
+                print "failure: {}".format(status)
         return usage, ret
 
     def helpGetTracking(self, name):
@@ -491,7 +491,7 @@ class BSTConfigCommand():
                 ret = json.dumps(x.getJSON())
                 print ret
             else:
-                print "failure: %d" % (status)
+                print "failure: {}".format(status)
 
         return usage, ret
 
@@ -537,7 +537,7 @@ class BSTConfigCommand():
                 ret = json.dumps(x.getJSON())
                 print ret
             else:
-                print "failure: %d" % (status)
+                print "failure: {}".format(status)
 
         return usage, ret
 

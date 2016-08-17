@@ -114,7 +114,7 @@ class BroadViewCommand():
                 ret = json.dumps(x.getJSON())
                 print ret
             else:
-                print "failure: %d" % (status)
+                print "failure: {}".format(status)
 
         return usage, ret
 
@@ -133,7 +133,7 @@ class BroadViewCommand():
                 ret = json.dumps(x.getJSON())
                 print ret
             else:
-                print "failure: %d" % (status)
+                print "failure: {}".format(status)
 
         return usage, ret
 

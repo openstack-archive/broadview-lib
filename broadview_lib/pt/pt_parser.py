@@ -301,6 +301,8 @@ class TestParser(unittest.TestCase):
                             "data": {
                                 "lag-id": "2",
                                 "lag-members": ["1", "2", "3", "4"],
+                                "fabric-trunk-id": "6",
+                                "fabric-trunk-members": ["1", "2", "3"],
                                 "dst-lag-member": "4"
                             }
                         },
@@ -334,7 +336,9 @@ class TestParser(unittest.TestCase):
                             "data": {
                                 "lag-id": "3",
                                 "lag-members": ["5","6","7","8"],
-                                "dst-lag-member": "6"
+                                "dst-lag-member": "6",
+                                "fabric-trunk-id": "5",
+                                "fabric-trunk-members": ["8", "9", "10"],
                             }
                         },
                         {
@@ -377,7 +381,9 @@ class TestParser(unittest.TestCase):
                             "data": {
                                 "lag-id": "2",
                                 "lag-members": ["1", "2", "3", "4"],
-                                "dst-lag-member": "4"
+                                "dst-lag-member": "4",
+                                "fabric-trunk-id": "7",
+                                "fabric-trunk-members": ["11", "12", "13"],
                             }
                         },
                         {
@@ -410,7 +416,9 @@ class TestParser(unittest.TestCase):
                             "data": {
                                 "lag-id": "2",
                                 "lag-members": ["1","2","3","4"],
-                                "dst-lag-member": "4"
+                                "dst-lag-member": "4",
+                                "fabric-trunk-id": "9",
+                                "fabric-trunk-members": ["21", "32", "43"],
                             }
                         },
                         {
@@ -778,7 +786,9 @@ class TestParser(unittest.TestCase):
                             "3",
                             "4"
                         ],
-                        "dst-lag-member": "4"
+                        "dst-lag-member": "4",
+                        "fabric-trunk-id": "3",
+                        "fabric-trunk-members": ["17", "18", "19"],
                     }
                 },
                 {
@@ -791,6 +801,8 @@ class TestParser(unittest.TestCase):
                             "7",
                             "8"
                         ],
+                        "fabric-trunk-id": "6",
+                        "fabric-trunk-members": ["27", "28", "29"],
                         "dst-lag-member": "7"
                     }
                 }
@@ -1745,6 +1757,13 @@ class TestParser(unittest.TestCase):
                 self.assertEqual(True, "3" in lm)
                 self.assertEqual(True, "4" in lm)
 
+                self.assertEqual(llr.getFabricTrunkID(), "3")
+                lm = llr.getFabricTrunkMembers()
+                self.assertEqual(len(lm), 3)
+                self.assertEqual(True, "17" in lm)
+                self.assertEqual(True, "18" in lm)
+                self.assertEqual(True, "19" in lm)
+
                 self.assertEqual(llr.getDstLAGMember(), "4")
             elif m.getPort() == "2":
                 self.assertEqual(llr.getLAGID(), "2")
@@ -1755,6 +1774,13 @@ class TestParser(unittest.TestCase):
                 self.assertEqual(True, "6" in lm)
                 self.assertEqual(True, "7" in lm)
                 self.assertEqual(True, "8" in lm)
+
+                self.assertEqual(llr.getFabricTrunkID(), "6")
+                lm = llr.getFabricTrunkMembers()
+                self.assertEqual(len(lm), 3)
+                self.assertEqual(True, "27" in lm)
+                self.assertEqual(True, "28" in lm)
+                self.assertEqual(True, "29" in lm)
 
                 self.assertEqual(llr.getDstLAGMember(), "7")
             else:
@@ -2135,6 +2161,13 @@ class TestParser(unittest.TestCase):
                         self.assertEqual(True, "3" in lm)
                         self.assertEqual(True, "4" in lm)
 
+                        self.assertEqual(llr.getFabricTrunkID(), "6")
+                        lm = llr.getFabricTrunkMembers()
+                        self.assertEqual(len(lm), 3)
+                        self.assertEqual(True, "1" in lm)
+                        self.assertEqual(True, "2" in lm)
+                        self.assertEqual(True, "3" in lm)
+
                         self.assertEqual(llr.getDstLAGMember(), "4")
                     elif m.getPort() == "2":
                         self.assertEqual(llr.getLAGID(), "3")
@@ -2145,6 +2178,13 @@ class TestParser(unittest.TestCase):
                         self.assertEqual(True, "6" in lm)
                         self.assertEqual(True, "7" in lm)
                         self.assertEqual(True, "8" in lm)
+
+                        self.assertEqual(llr.getFabricTrunkID(), "5")
+                        lm = llr.getFabricTrunkMembers()
+                        self.assertEqual(len(lm), 3)
+                        self.assertEqual(True, "8" in lm)
+                        self.assertEqual(True, "9" in lm)
+                        self.assertEqual(True, "10" in lm)
 
                         self.assertEqual(llr.getDstLAGMember(), "6")
                     else:

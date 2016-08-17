@@ -148,7 +148,7 @@ class BHDCommand():
                         print "invalid enable: bad argument count"
             status = x.send(timeout=self._timeout)
             if status != 200:
-                print "failure: %d" % (status)
+                print "failure: {}".format(status)
 
         ret = None
         return usage, ret
@@ -172,7 +172,7 @@ class BHDCommand():
                         v2 = v[1].split(",")
                         port_list = []
                         for y in v2:
-                            port_list.append(x)
+                            port_list.append(y)
                         x.setPortList(port_list)
                     else:
                         print "invalid port-list: bad argument count"
@@ -244,7 +244,7 @@ class BHDCommand():
             x.setASIC(asic)
             status = x.send(self._timeout)
             if status != 200:
-                print "failure: %d" % (status)
+                print "failure: {}".format(status)
 
         ret = None
         return usage, ret
@@ -274,7 +274,7 @@ class BHDCommand():
             x.setASIC(asic)
             status = x.send(self._timeout)
             if status != 200:
-                print "failure: %d" % (status)
+                print "failure: {}".format(status)
 
         ret = None
         return usage, ret
@@ -293,7 +293,7 @@ class BHDCommand():
                 ret = json.dumps(x.getJSON())
                 print ret
             else:
-                print "failure: %d" % (status)
+                print "failure: {}".format(status)
 
         ret = None
         return usage, ret
@@ -312,7 +312,7 @@ class BHDCommand():
                 ret = json.dumps(x.getJSON())
                 print ret
             else:
-                print "failure: %d" % (status)
+                print "failure: {}".format(status)
 
         ret = None
         return usage, ret
@@ -332,7 +332,7 @@ class BHDCommand():
                         v2 = v[1].split(",")
                         port_list = []
                         for y in v2:
-                            port_list.append(x)
+                            port_list.append(y)
                         x.setPortList(port_list)
                     else:
                         print "invalid port-list: bad argument count"
@@ -344,7 +344,7 @@ class BHDCommand():
                 ret = json.dumps(x.getJSON())
                 print ret
             else:
-                print "failure: %d" % (status)
+                print "failure: {}".format(status)
 
         ret = None
         return usage, ret

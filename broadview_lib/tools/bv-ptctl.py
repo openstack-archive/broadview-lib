@@ -145,7 +145,7 @@ class PTCommand():
             x.setEnable("enable" in args)
             status = x.send(timeout=self._timeout)
             if status != 200:
-                print "failure: %d" % (status)
+                print "failure: {}".format(status)
 
         ret = None
         return usage, ret
@@ -180,7 +180,7 @@ class PTCommand():
                         v2 = v[1].split(",")
                         port_list = []
                         for y in v2:
-                            port_list.append(x)
+                            port_list.append(y)
                         x.setPortList(port_list)
                     else:
                         print "invalid port-list: bad argument count"
@@ -217,7 +217,7 @@ class PTCommand():
             x.setASIC(asic)
             status = x.send(self._timeout)
             if status != 200:
-                print "failure: %d" % (status)
+                print "failure: {}".format(status)
 
         ret = None
         return usage, ret
@@ -242,7 +242,7 @@ class PTCommand():
             x.setASIC(asic)
             status = x.send(self._timeout)
             if status != 200:
-                print "failure: %d" % (status)
+                print "failure: {}".format(status)
 
         ret = None
         return usage, ret
@@ -258,7 +258,7 @@ class PTCommand():
             x.setASIC(asic)
             status = x.send(self._timeout)
             if status != 200:
-                print "failure: %d" % (status)
+                print "failure: {}".format(status)
 
         ret = None
         return usage, ret
@@ -274,7 +274,7 @@ class PTCommand():
             x.setASIC(asic)
             status = x.send(self._timeout)
             if status != 200:
-                print "failure: %d" % (status)
+                print "failure: {}".format(status)
 
         ret = None
         return usage, ret
@@ -305,7 +305,7 @@ class PTCommand():
                         v2 = v[1].split(",")
                         port_list = []
                         for y in v2:
-                            port_list.append(x)
+                            port_list.append(y)
                         x.setPortList(port_list)
                     else:
                         print "invalid port-list: bad argument count"
@@ -314,7 +314,7 @@ class PTCommand():
             x.setASIC(asic)
             status = x.send(self._timeout)
             if status != 200:
-                print "failure: %d" % (status)
+                print "failure: {}".format(status)
 
         ret = None
         return usage, ret
@@ -350,7 +350,7 @@ class PTCommand():
                         v2 = v[1].split(",")
                         port_list = []
                         for y in v2:
-                            port_list.append(x)
+                            port_list.append(y)
                         x.setPortList(port_list)
                     else:
                         print "invalid port-list: bad argument count"
@@ -359,7 +359,7 @@ class PTCommand():
             x.setASIC(asic)
             status = x.send(self._timeout)
             if status != 200:
-                print "failure: %d" % (status)
+                print "failure: {}".format(status)
 
         ret = None
         return usage, ret
@@ -383,7 +383,7 @@ class PTCommand():
                 ret = json.dumps(x.getJSON())
                 print ret
             else:
-                print "failure: %d" % (status)
+                print "failure: {}".format(status)
 
         ret = None
         return usage, ret
@@ -417,7 +417,7 @@ class PTCommand():
                         v2 = v[1].split(",")
                         port_list = []
                         for y in v2:
-                            port_list.append(x)
+                            port_list.append(y)
                         x.setPortList(port_list)
                     else:
                         print "invalid port-list: bad argument count"
@@ -436,7 +436,7 @@ class PTCommand():
                 ret = json.dumps(x.getJSON())
                 print ret
             else:
-                print "failure: %d" % (status)
+                print "failure: {}".format(status)
 
         ret = None
         return usage, ret
@@ -477,7 +477,7 @@ class PTCommand():
                         v2 = v[1].split(",")
                         port_list = []
                         for y in v2:
-                            port_list.append(x)
+                            port_list.append(y)
                         x.setPortList(port_list)
                     else:
                         print "invalid port-list: bad argument count"
@@ -496,7 +496,7 @@ class PTCommand():
                 ret = json.dumps(x.getJSON())
                 print ret
             else:
-                print "failure: %d" % (status)
+                print "failure: {}".format(status)
 
         ret = None
         return usage, ret
@@ -533,12 +533,16 @@ class PTCommand():
                         print "invalid packet: bad argument count"
                         usage = True
                 elif "port-list:" in arg:
+                    print "port-list enter"
                     v = arg.split(":")
+                    print "port-list args {}".format(v)
                     if len(v) == 2:
                         v2 = v[1].split(",")
+                        print "port-list v2 {}".format(v2)
                         port_list = []
                         for y in v2:
-                            port_list.append(x)
+                            port_list.append(y)
+                        print "setting port_list {}".format(port_list)
                         x.setPortList(port_list)
                     else:
                         print "invalid port-list: bad argument count"
@@ -557,7 +561,7 @@ class PTCommand():
                 ret = json.dumps(x.getJSON())
                 print ret
             else:
-                print "failure: %d" % (status)
+                print "failure: {}".format(status)
 
         ret = None
         return usage, ret
@@ -578,12 +582,12 @@ class PTCommand():
         if not usage:
             x = GetPacketTraceDropReason(host, port)
             x.setASIC(asic)
-            status = x.send(self._timeout)
+            status, rep = x.send(self._timeout)
             if status == 200:
-                ret = json.dumps(x.getJSON())
+                ret = json.dumps(rep.getJSON())
                 print ret
             else:
-                print "failure: %d" % (status)
+                print "failure: {}".format(status)
 
         ret = None
         return usage, ret
@@ -614,7 +618,7 @@ class PTCommand():
                         v2 = v[1].split(",")
                         port_list = []
                         for y in v2:
-                            port_list.append(x)
+                            port_list.append(y)
                         x.setPortList(port_list)
                     else:
                         print "invalid port-list: bad argument count"
@@ -632,7 +636,7 @@ class PTCommand():
                 ret = json.dumps(x.getJSON())
                 print ret
             else:
-                print "failure: %d" % (status)
+                print "failure: {}".format(status)
 
         ret = None
         return usage, ret
@@ -657,7 +661,7 @@ class PTCommand():
                 ret = json.dumps(x.getJSON())
                 print ret
             else:
-                print "failure: %d" % (status)
+                print "failure: {}".format(status)
 
         ret = None
         return usage, ret
