@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-host=10.14.244.128
-port=8082
+host=10.18.20.217
+port=8080
+
+BV_USERNAME=admin
+BV_PASSWORD=
+BV_AUTH=sidauth
+
+export BV_USERNAME
+export BV_PASSWORD
+export BV_AUTH
 
 echo "********** get-system-feature **********"
 python bv-ctl.py get-system-feature timeout:30 host:$host port:$port 
@@ -35,5 +43,5 @@ python bv-ptctl.py cancel-lag-resolution timeout:30 host:$host port:$port
 echo "********** pt cancel-ecmp-resolution **********"
 python bv-ptctl.py cancel-ecmp-resolution timeout:30 host:$host port:$port 
 echo "********** pt get-profile **********"
-python bv-ptctl.py get-profile drop-packet:1 collection-interval:45 timeout:30 host:$host port:$port 
+python bv-ptctl.py get-lag-resolution packet:"1MOyoQIABAAAAAAAAAAAAP//AAABAAAANlMKVgAAAABDAAAAQwAAAAAAAAAGAAAO7DIeCoEAAAoAAQIDBAUGBwgJCgsMDQ4PEBESExQVFhcYGRobHB0eHyAhIiMkJSYnKCkqKywtLi8V5EQ=" port-list:"0/4" drop-packet:1 collection-interval:10 timeout:30 host:$host port:$port 
 

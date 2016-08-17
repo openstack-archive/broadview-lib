@@ -347,7 +347,7 @@ class GetPacketTraceLAGResolution(AgentAPI):
             rep.process(json)
         else:
             pass
-        return status, rep
+        return status
 
     def toDict(self):
         ret = {}
@@ -406,7 +406,7 @@ class GetPacketTraceECMPResolution(AgentAPI):
             rep.process(json)
         else:
             pass
-        return status, rep
+        return status
 
     def toDict(self):
         ret = {}
@@ -465,7 +465,7 @@ class GetPacketTraceProfile(AgentAPI):
             rep.process(json)
         else:
             pass
-        return status, rep
+        return status
 
     def toDict(self):
         ret = {}
@@ -505,7 +505,7 @@ class GetPacketTraceDropReason(AgentAPI):
             rep.process(json)
         else:
             pass
-        return status, rep
+        return status
 
     def toDict(self):
         ret = {}
@@ -548,7 +548,7 @@ class GetPacketTraceDropCounterReport(AgentAPI):
             rep.process(json)
         else:
             pass
-        return status, rep
+        return status
 
     def toDict(self):
         ret = {}
@@ -585,7 +585,7 @@ class GetPacketTraceSupportedDropReasons(AgentAPI):
             rep.process(json)
         else:
             pass
-        return status, rep
+        return status
 
     def toDict(self):
         ret = {}

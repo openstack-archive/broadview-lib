@@ -17,6 +17,8 @@ class LAGLinkResolution():
         self.lag_id = None
         self.lag_members = None
         self.dst_lag_member = None
+        self.fabric_trunk_id = None
+        self.fabric_trunk_members = None
 
     def getLAGID(self):
         return self.lag_id
@@ -26,6 +28,12 @@ class LAGLinkResolution():
 
     def getDstLAGMember(self):
         return self.dst_lag_member
+
+    def getFabricTrunkID(self):
+        return self.fabric_trunk_id
+
+    def getFabricTrunkMembers(self):
+        return self.fabric_trunk_members
 
     def __repr__(self):
         return "lag-link-resolution"
@@ -42,6 +50,14 @@ class LAGLinkResolution():
             ret = False
         if "dst-lag-member" in data:
             self.dst_lag_member = data["dst-lag-member"]
+        else:
+            ret = False
+        if "fabric-trunk-id" in data:
+            self.fabric_trunk_id = data["fabric-trunk-id"]
+        else:
+            ret = False
+        if "fabric-trunk-members" in data:
+            self.fabric_trunk_members = data["fabric-trunk-members"]
         else:
             ret = False
         return ret
