@@ -27,7 +27,7 @@ class ConfigureBSTFeature(AgentAPI):
         self.__bst_enable = False
         self.__send_async_reports = False
         self.__collection_interval = 60
-        self.__stat_in_percentage = False
+        self.__stats_in_percentage = False
         self.__stat_units_in_cells = False
         self.__trigger_rate_limit = 1
         self.__trigger_rate_limit_interval = 1
@@ -45,7 +45,7 @@ class ConfigureBSTFeature(AgentAPI):
         self.__collection_interval = val
 
     def setStatInPercentage(self, val):
-        self.__stat_in_percentage = val
+        self.__stats_in_percentage = val
 
     def setStatUnitsInCells(self, val):
         self.__stat_units_in_cells = val
@@ -76,7 +76,7 @@ class ConfigureBSTFeature(AgentAPI):
         params["bst-enable"] = 1 if self.__bst_enable else 0 
         params["send-async-reports"] = 1 if self.__send_async_reports else 0
         params["collection-interval"] = self.__collection_interval
-        params["stat-in-percentage"] = 1 if self.__stat_in_percentage else 0
+        params["stats-in-percentage"] = 1 if self.__stats_in_percentage else 0
         params["stat-units-in-cells"] = 1 if self.__stat_units_in_cells else 0
         params["trigger-rate-limit"] = self.__trigger_rate_limit
         params["trigger-rate-limit-interval"] = self.__trigger_rate_limit_interval 
@@ -455,7 +455,7 @@ class GetBSTFeature(AgentAPI):
         self.__version = 1
         self.__send_async_reports = False
         self.__collection_interval = 200
-        self.__stat_in_percentage = False
+        self.__stats_in_percentage = False
         self.__stat_units_in_cells = False
         self.__trigger_rate_limit = False
         self.__trigger_rate_limit_interval = 0
@@ -473,7 +473,7 @@ class GetBSTFeature(AgentAPI):
         return self.__collection_interval
 
     def getStatInPercentage(self):
-        return self.__stat_in_percentage
+        return self.__stats_in_percentage
 
     def getStatUnitsInCells(self):
         return self.__stat_units_in_cells
@@ -508,7 +508,10 @@ class GetBSTFeature(AgentAPI):
             self.__bst_enable = res["bst-enable"] == 1
             self.__send_async_reports = res["send-async-reports"] == 1
             self.__collection_interval = res["collection-interval"]
-            # XXX self.__stat_in_percentage = res["stat-in-percentage"] == 1
+            try:
+                self.__stats_in_percentage = res["stats-in-percentage"] == 1
+            except:
+                self.__stats_in_percentage = False 
             self.__stat_units_in_cells = res["stat-units-in-cells"] == 1
             self.__trigger_rate_limit = res["trigger-rate-limit"] == 1
             self.__trigger_rate_limit_interval = res["trigger-rate-limit-interval"]
@@ -829,7 +832,7 @@ class TestBSTAPIParams(unittest.TestCase):
         self.assertEqual(params["bst-enable"], False)
         self.assertEqual(params["send-async-reports"], False)
         self.assertEqual(params["collection-interval"], 60)
-        self.assertEqual(params["stat-in-percentage"], False)
+        self.assertEqual(params["stats-in-percentage"], False)
         self.assertEqual(params["stat-units-in-cells"], False)
         self.assertEqual(params["trigger-rate-limit"], 1)
         self.assertEqual(params["trigger-rate-limit-interval"], 1) 
@@ -851,7 +854,7 @@ class TestBSTAPIParams(unittest.TestCase):
         self.assertEqual(params["bst-enable"], True)
         self.assertEqual(params["send-async-reports"], True)
         self.assertEqual(params["collection-interval"], 120)
-        self.assertEqual(params["stat-in-percentage"], True)
+        self.assertEqual(params["stats-in-percentage"], True)
         self.assertEqual(params["stat-units-in-cells"], True)
         self.assertEqual(params["trigger-rate-limit"], 15)
         self.assertEqual(params["trigger-rate-limit-interval"], 99) 

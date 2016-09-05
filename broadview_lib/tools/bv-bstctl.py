@@ -149,7 +149,7 @@ class BSTConfigCommand():
                         print "invalid trigger_rate_limit_interval argument"
                         usage = True
 
-            x.setStatInPercentage("stat_in_percentage" in args)
+            x.setStatInPercentage("stats_in_percentage" in args)
             x.setStatUnitsInCells("stat_units_in_cells" in args)
             x.setSendSnapshotOnTrigger("send_snapshot_on_trigger" in args)
             x.setAsyncFullReports("async_full_reports" in args)
@@ -168,7 +168,7 @@ class BSTConfigCommand():
         print "   enable"
         print "   send_async_reports"
         print "   collection_interval:val" 
-        print "   stat_in_percentage"
+        print "   stats_in_percentage"
         print "   stat_units_in_cells"
         print "   trigger_rate_limit:val"
         print "   trigger_rate_limit_interval:val"
@@ -330,7 +330,7 @@ class BSTConfigCommand():
                         if status != 200:
                             print "failure: {}".format(status)
                     else:
-                        print "invalid egress-mc-queue-group: bad argument count"
+                        print "invalid egress-mc-queue: bad argument count"
                         usage = True
                 elif "ingress-port-priority-group:" in arg:
                     v = arg.split(":")
@@ -393,7 +393,7 @@ class BSTConfigCommand():
         print " egress-service-pool:service-pool:um-share-threshold:mc-share-threshold:mc-share-queue-entries-threshold"
         print "   egress-uc-queue:queue:uc-threshold"
         print "   egress-uc-queue-group:queue-group:uc-threshold"
-        print "   egress-mc-queue:queue:mc-queue-entries-threshold"
+        print "   egress-mc-queue:queue:mc-queue-entries-threshold:mc-threshold"
         print "   ingress-port-priority-group:port:priority-group:um-share-threshold:um-headroom-threshold"
         print "   ingress-port-service-pool:port:service-pool:um-share-threshold"
         print "   ingress-service-pool:service-pool:um-share-threshold"
