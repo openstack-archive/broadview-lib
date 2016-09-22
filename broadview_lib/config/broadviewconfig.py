@@ -16,6 +16,27 @@ import ConfigParser
 import json
 import unittest
 
+class BroadViewLibConfig():
+    cfg = None
+
+    def __init__(self):
+        if not BroadViewLibConfig.cfg:
+            try:
+                BroadViewLibConfig.cfg = ConfigParser.ConfigParser()
+                BroadViewLibConfig.cfg.read("/etc/broadviewlib.conf")
+            except:
+                BroadViewLibConfig.cfg = None
+                pass
+
+    def getRequestIDFile(self):
+        ret = "/tmp/bvserial.txt"
+        try:
+            ret = BroadViewLibConfig.cfg.get("misc", "json_rpc_id_path")
+        except:
+            pass
+
+        return ret
+
 class BroadViewBSTSwitches():
     cfg = None
     bst_switches = None

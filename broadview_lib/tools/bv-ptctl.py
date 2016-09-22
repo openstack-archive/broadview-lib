@@ -236,10 +236,24 @@ class PTCommand():
 
     def handleCancelProfile(self, args):
         usage = False
+	reqid = None
         usage, asic, host, port = self.getASICHostPort(args)
+        if not usage:
+            for arg in args:
+                if "id:" in arg:
+                    v = arg.split(":")
+                    if len(v) == 2:
+                        reqid = int(v[1])
+                    else:
+                        print "invalid id: bad argument count"
+                        usage = True
+        if reqid == None:
+            print "missing id argument"
+            usage = True
         if not usage:
             x = CancelPacketTraceProfile(host, port)
             x.setASIC(asic)
+            x.setId(reqid)
             status = x.send(self._timeout)
             if status != 200:
                 print "failure: {}".format(status)
@@ -249,13 +263,31 @@ class PTCommand():
 
     def helpCancelProfile(self, name):
         print name
+        print
+        print "args:"
+        print
+        print "   id:id (see cancellation-id output from get-profile command)"
+        print "   id:id"
 
     def handleCancelLAGResolution(self, args):
         usage = False
+	reqid = None
         usage, asic, host, port = self.getASICHostPort(args)
+        if not usage:
+            for arg in args:
+                if "id:" in arg:
+                    v = arg.split(":")
+                    if len(v) == 2:
+                        reqid = int(v[1])
+                    else:
+                        print "invalid id: bad argument count"
+                        usage = True
+        if reqid == None:
+            print "missing id argument"
         if not usage:
             x = CancelPacketTraceLAGResolution(host, port)
             x.setASIC(asic)
+            x.setId(reqid)
             status = x.send(self._timeout)
             if status != 200:
                 print "failure: {}".format(status)
@@ -265,13 +297,30 @@ class PTCommand():
 
     def helpCancelLAGResolution(self, name):
         print name
+        print
+        print "args:"
+        print
+        print "   id:id (see cancellation-id output from get-lag-resolution command"
 
     def handleCancelECMPResolution(self, args):
         usage = False
+	reqid = None
         usage, asic, host, port = self.getASICHostPort(args)
+        if not usage:
+            for arg in args:
+                if "id:" in arg:
+                    v = arg.split(":")
+                    if len(v) == 2:
+                        reqid = int(v[1])
+                    else:
+                        print "invalid id: bad argument count"
+                        usage = True
+        if reqid == None:
+            print "missing id argument"
         if not usage:
             x = CancelPacketTraceECMPResolution(host, port)
             x.setASIC(asic)
+            x.setId(reqid)
             status = x.send(self._timeout)
             if status != 200:
                 print "failure: {}".format(status)
@@ -281,6 +330,10 @@ class PTCommand():
 
     def helpCancelECMPResolution(self, name):
         print name
+        print
+        print "args:"
+        print
+        print "   id:id (see cancellation-id output from get-ecmp-resolution command"
 
     def handleCancelSendDropPacket(self, args):
         usage = False
@@ -450,6 +503,10 @@ class PTCommand():
         print "   port-list:port[,port][,port]...[,port]"
         print "   collection-interval: interval"
         print "   drop-packet: [0|1]"
+        print
+        print "notes:"
+        print
+        print "   use the cancellation-id output as id arg for cancel-lag-resolution command to cancel when collection-interval non-zero"
 
     def handleGetECMPResolution(self, args):
         usage = False
@@ -510,6 +567,10 @@ class PTCommand():
         print "   port-list:port[,port][,port]...[,port]"
         print "   collection-interval: interval"
         print "   drop-packet: [0|1]"
+        print
+        print "notes:"
+        print
+        print "   use the cancellation-id output as id arg for cancel-ecmp-resolution command to cancel when collection-interval non-zero"
 
     def handleGetProfile(self, args):
         usage = False
@@ -575,6 +636,10 @@ class PTCommand():
         print "   port-list:port[,port][,port]...[,port]"
         print "   collection-interval: interval"
         print "   drop-packet: [0|1]"
+        print
+        print "notes:"
+        print
+        print "   use the cancellation-id output as id arg for cancel-profile command to cancel when collection-interval non-zero"
 
     def handleGetDropReason(self, args):
         usage = False

@@ -343,6 +343,8 @@ class GetPacketTraceLAGResolution(AgentAPI):
         rep = None
         if status == 200:
             self.__json = json["report"]
+            print self.__json
+            self.__json[0]["cancellation-id"] = self.getLastUsedSerial()
             rep = PTParser()
             rep.process(json)
         else:
@@ -402,6 +404,7 @@ class GetPacketTraceECMPResolution(AgentAPI):
         rep = None
         if status == 200:
             self.__json = json["report"]
+            self.__json[0]["cancellation-id"] = self.getLastUsedSerial()
             rep = PTParser()
             rep.process(json)
         else:
@@ -461,6 +464,7 @@ class GetPacketTraceProfile(AgentAPI):
         rep = None
         if status == 200:
             self.__json = json["report"]
+            self.__json[0]["cancellation-id"] = self.getLastUsedSerial()
             rep = PTParser()
             rep.process(json)
         else:
