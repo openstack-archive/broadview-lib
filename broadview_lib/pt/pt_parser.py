@@ -221,9 +221,17 @@ class PTParser():
             if ret:
                 self.__asicId = data["asic-id"]
                 if "time-stamp" in data:
+                    epoch = time.gmtime(0)
                     x = data["time-stamp"].strip()
                     try:
-                        self.__timestamp = time.strptime(x, "%Y-%m-%d - %H:%M:%S")
+                        ts = time.strptime(x, "%Y-%m-%d - %H:%M:%S")
+                        # bug: agent can send epoch here, so try and detect
+                        # sending epoch causes issues for ceilometer and maybe
+                        # others. It's enough that the years match on this 
+                        if ts.tm_year == epoch.tm_year: 
+                            self.__timestamp = time.localtime()
+                        else:
+                            self.__timestamp = ts
                     except:
                         ret = False
 
