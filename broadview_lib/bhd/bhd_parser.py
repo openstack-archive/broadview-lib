@@ -25,7 +25,7 @@ class BHDParser():
     def __init__(self):
         self.__reportType = None
         self.__black_hole = None
-        self.__black_hole_event_report = []
+        self.__black_hole_event_report = None
         self.__sflow_sampling_status = []
 
         self.__reportHandlers = [self._handleBlackHole,

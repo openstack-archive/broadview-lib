@@ -44,7 +44,7 @@ class BlackHoleDetectionEnable(AgentAPI):
         params["enable"] = 1 if self.__black_hole_detection_enable else 0 
         ret["asic-id"] = self.__asic_id
         ret["params"] = params
-        ret["method"] = "black-hole-detection-enable"
+        ret["method"] = "configure-black-hole-detection-enable"
         return ret
 
 class ConfigureBlackHole(AgentAPI):
