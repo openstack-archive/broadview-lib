@@ -99,7 +99,8 @@ Hole Detection feature.
 ### bv-ctl.py
 
 A command line application that can be used to issue general BroadView
-commands for querying the supported features of BroadView, etc.
+commands for querying the supported features of BroadView, cancelling
+requests, etc.
 
 # Classes
 
@@ -120,7 +121,31 @@ This command is used to retrieve the switch properties.
 ### GetSystemFeature
 
 This command is used to retrieve the current configuration of the System 
-module on the Agent.
+module on the Agent. 
+
+### ConfigureSystemFeature
+
+This command can be used to enable or disable heartbeat messages from the
+agent, as well as specify a heartbeat interval.
+
+### CancelRequest
+
+All JSON RPC requests to the agent must be identified by a unique integer ID.
+The reference implementation of the agent does not provide any support for
+managing the ID space, ad it is left to client to ensure that IDs are unique.
+broadview-lib supports this by maintaining an ID file that is shared across all
+broadview-lib instances on the host and possibly the datacenter should the
+ID file be placed in a shared file system. See commit
+a72b75082ee961abcdc7da542da6767ee484560e for details on the implementation.
+
+The CancelRequest command takes the ID of a previous request as an argument
+and cancels that command on the agent. To obtain this ID, refer to the JSON
+output of the corresponding command for the cancellation-id field. Alternately,
+Python code using configuration objects can get at this ID for a request by
+calling getLastUsedSerial() member function of the object before making another
+request with that object (the configuration objects record the last used ID
+number within the object, so as long as the object itself is being used in a 
+thread safe manner, this ID will be correct).
 
 ## BST Configuration and Data Gathering
 

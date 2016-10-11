@@ -25,12 +25,16 @@ class BroadViewCommand():
         self.__cmds = { 
                         "get-switch-properties" : self.handleGetSwitchProperties,
                         "get-system-feature" : self.handleGetSystemFeature,
+                        "configure-system-feature" : self.handleConfigureSystemFeature,
+                        "cancel-request" : self.handleCancelRequest,
                         "help": self.handleHelp,
                       }
 
         self.__help = { 
                         "get-switch-properties" : self.helpGetSwitchProperties,
                         "get-system-feature" : self.helpGetSystemFeature,
+                        "configure-system-feature" : self.helpConfigureSystemFeature,
+                        "cancel-request" : self.helpCancelRequest,
                       }
 
     def getTimeout(self, args):
@@ -139,6 +143,72 @@ class BroadViewCommand():
 
     def helpGetSystemFeature(self, name):
         print name
+
+    def handleConfigureSystemFeature(self, args):
+        usage = False
+        usage, asic, host, port = self.getASICHostPort(args)
+        usage, self._timeout = self.getTimeout(args)
+        if not usage:
+            x = ConfigureSystemFeature(host, port)
+            x.setASIC(asic) 
+            x.setHeartbeatEnable("heartbeat_enable" in args)
+            for arg in args:
+                if "msg_interval:" in arg:
+                    v = arg.split(":")
+                    if len(v) == 2:
+                        x.setMsgInterval(int(v[1]))
+                    else:
+                        print "invalid msg-interval argument"
+                        usage = True
+
+            status = x.send(timeout=self._timeout)
+            if status != 200:
+                print "failure: {}".format(status)
+
+        ret = None
+        return usage, ret
+
+    def helpConfigureSystemFeature(self, name):
+        print name, "[args]"
+        print
+        print "args:"
+        print
+        print "   heartbeat_enable"
+        print "   msg_interval:interval_in_seconds" 
+        print
+        print "Note: if heartbeat_enable not specified, heartbeats will be disabled"
+
+    def handleCancelRequest(self, args):
+        usage = False
+        usage, asic, host, port = self.getASICHostPort(args)
+        usage, self._timeout = self.getTimeout(args)
+        if not usage:
+            x = CancelRequest(host, port)
+            x.setASIC(asic)
+            for arg in args:
+                if "request_id:" in arg:
+                    v = arg.split(":")
+                    if len(v) == 2:
+                        x.setRequestId(int(v[1]))
+                    else:
+                        print "invalid request id argument"
+                        usage = True
+
+            status = x.send(timeout=self._timeout)
+            if status != 200:
+                print "failure: {}".format(status)
+
+        ret = None
+        return usage, ret
+
+    def helpCancelRequest(self, name):
+        print name, "[args]"
+        print
+        print "args:"
+        print
+        print "   request_id:id"
+        print ""
+        print "Note: see the cancellation-id member of the JSON output for the corresponding command for the ID."
 
     def isCmd(self, cmd):
         return cmd in self.__cmds
